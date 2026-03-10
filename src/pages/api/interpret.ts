@@ -2,6 +2,8 @@ import type { APIRoute } from 'astro';
 import { createXai } from '@ai-sdk/xai';
 import { generateText } from 'ai';
 
+export const prerender = false;
+
 export const POST: APIRoute = async ({ request }) => {
   const body = await request.json();
   const { question, hexagramName, hexagramFullName, hexagramNumber, judgment, image, changingLines, transformedName, transformedJudgment, nature, keywords } = body;
