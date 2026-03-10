@@ -88,21 +88,58 @@ const site = 'https://zenkami.com';
           <blockquote id="transformedJudgment" style="border-left:3px solid var(--jade,var(--c-primary));padding:.75rem 1rem;background:rgba(255,255,255,.5);border-radius:0 8px 8px 0;font-family:var(--ff-serif);margin:0"></blockquote>
         </div>
 
-        <!-- AI Interpretation -->
+        <!-- AI Interpretation with Email Gate -->
         <div id="aiSection" style="margin-bottom:2rem">
-          <div style="text-align:center;padding:1.5rem;border:2px dashed var(--jade,#2d8a56);border-radius:12px;background:var(--jade-subtle,rgba(45,138,86,.04))">
-            <h3 style="font-size:1.1rem;margin-bottom:.5rem;color:var(--jade,var(--c-primary))">AI 智能解卦</h3>
-            <p style="font-size:.85rem;color:var(--mid-gray,#6b7280);margin-bottom:1rem">結合你的問題與卦象，由 AI 為你提供個人化的深度解讀</p>
-            <button id="aiBtn" class="cta-btn cta-btn--primary" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 2rem;border-radius:8px;font-weight:600;cursor:pointer">
-              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v1a3 3 0 0 1-3 3h-1v4a4 4 0 0 1-8 0v-4H7a3 3 0 0 1-3-3v-1a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/></svg>
-              AI 解卦
-            </button>
+          <!-- Email gate -->
+          <div id="aiGate" class="ai-gate">
+            <div class="ai-gate-icon">
+              <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v1a3 3 0 0 1-3 3h-1v4a4 4 0 0 1-8 0v-4H7a3 3 0 0 1-3-3v-1a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/></svg>
+            </div>
+            <h3 class="ai-gate-title">解鎖 AI 智能解卦</h3>
+            <p class="ai-gate-desc">輸入你的 Email，即可獲得 AI 為你量身打造的深度解讀。<br/><span style="font-size:.8rem;opacity:.7">同時訂閱每週易經洞見，隨時可退訂。</span></p>
+            <form id="aiEmailForm" class="ai-gate-form">
+              <input type="email" id="aiEmailInput" placeholder="your@email.com" required class="form-input" style="text-align:center;max-width:320px;margin:0 auto" />
+              <button type="submit" id="aiUnlockBtn" class="cta-btn cta-btn--primary" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 2rem;border-radius:8px;font-weight:600;cursor:pointer;margin-top:.75rem">
+                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v1a3 3 0 0 1-3 3h-1v4a4 4 0 0 1-8 0v-4H7a3 3 0 0 1-3-3v-1a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/></svg>
+                免費解鎖 AI 解卦
+              </button>
+            </form>
+            <p class="ai-gate-trust">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              已有 2,000+ 人使用，不寄垃圾信
+            </p>
           </div>
+          <!-- Loading -->
           <div id="aiLoading" style="display:none;text-align:center;padding:2rem">
             <div class="ai-spinner"></div>
             <p style="margin-top:1rem;color:var(--mid-gray,#6b7280);font-size:.9rem">AI 正在為你解讀卦象...</p>
           </div>
+          <!-- AI Result -->
           <div id="aiResult" style="display:none" class="ai-result-content"></div>
+          <!-- Consultation Upsell (hidden until AI result shows) -->
+          <div id="consultUpsell" style="display:none" class="consult-upsell">
+            <div class="consult-upsell-badge">限量名額</div>
+            <h3 class="consult-upsell-title">想要更深入的解讀？</h3>
+            <p class="consult-upsell-desc">AI 解卦提供方向性指引，但每個人的命局不同。<strong>真人大師一對一諮詢</strong>，結合你的生辰八字與當前卦象，給你最精準的人生建議。</p>
+            <div class="consult-upsell-features">
+              <div class="consult-feature">
+                <svg width="20" height="20" fill="none" stroke="var(--jade,#2d8a56)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <span>一對一視訊 / 語音諮詢 60 分鐘</span>
+              </div>
+              <div class="consult-feature">
+                <svg width="20" height="20" fill="none" stroke="var(--jade,#2d8a56)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <span>結合八字命盤 + 卦象雙重分析</span>
+              </div>
+              <div class="consult-feature">
+                <svg width="20" height="20" fill="none" stroke="var(--jade,#2d8a56)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <span>專屬文字報告 + 後續追蹤</span>
+              </div>
+            </div>
+            <a href="mailto:contact@zenkami.com?subject=預約易經諮詢&body=您好，我想預約一對一易經諮詢。%0A%0A我的問題是：%0A我的卦象是：" id="consultBtn" class="consult-upsell-btn">
+              預約諮詢（名額有限）
+            </a>
+            <p class="consult-upsell-note">回覆時間約 24 小時內 ・ 首次諮詢享優惠價</p>
+          </div>
         </div>
 
         <!-- Actions -->
@@ -215,10 +252,13 @@ const site = 'https://zenkami.com';
     throwsContainer.innerHTML = '';
 
     // Reset AI section
-    document.getElementById('aiSection')!.querySelector('div:first-child')!.setAttribute('style', 'text-align:center;padding:1.5rem;border:2px dashed var(--jade,#2d8a56);border-radius:12px;background:var(--jade-subtle,rgba(45,138,86,.04))');
-    (document.getElementById('aiSection')!.querySelector('div:first-child') as HTMLElement).style.display = '';
+    document.getElementById('aiGate')!.style.display = '';
     document.getElementById('aiLoading')!.style.display = 'none';
     document.getElementById('aiResult')!.style.display = 'none';
+    document.getElementById('consultUpsell')!.style.display = 'none';
+    const unlockBtn = document.getElementById('aiUnlockBtn') as HTMLButtonElement;
+    unlockBtn.textContent = '免費解鎖 AI 解卦';
+    unlockBtn.disabled = false;
 
     const lines: LineResult[] = [];
 
@@ -350,19 +390,21 @@ const site = 'https://zenkami.com';
     }
   }
 
-  // AI Interpretation
-  const aiBtn = document.getElementById('aiBtn')!;
-  aiBtn.addEventListener('click', async () => {
+  // AI Interpretation with Email Gate
+  const aiEmailForm = document.getElementById('aiEmailForm')!;
+  const aiGate = document.getElementById('aiGate')!;
+  const aiLoading = document.getElementById('aiLoading')!;
+  const aiResult = document.getElementById('aiResult')!;
+  const consultUpsell = document.getElementById('consultUpsell')!;
+
+  async function requestAiInterpretation() {
     if (!currentHex) return;
 
     const question = (document.getElementById('questionInput') as HTMLTextAreaElement).value.trim();
-    const aiBtnContainer = document.getElementById('aiSection')!.querySelector('div:first-child') as HTMLElement;
-    const aiLoading = document.getElementById('aiLoading')!;
-    const aiResult = document.getElementById('aiResult')!;
-
-    aiBtnContainer.style.display = 'none';
+    aiGate.style.display = 'none';
     aiLoading.style.display = '';
     aiResult.style.display = 'none';
+    consultUpsell.style.display = 'none';
 
     const changingLines = currentChangingIndices.map(idx => ({
       position: idx + 1,
@@ -390,21 +432,46 @@ const site = 'https://zenkami.com';
       });
 
       const data = await res.json();
-
-      if (data.error) {
-        throw new Error(data.error);
-      }
+      if (data.error) throw new Error(data.error);
 
       aiLoading.style.display = 'none';
       aiResult.style.display = '';
       aiResult.innerHTML = renderMarkdown(data.interpretation);
+
+      // Show consultation upsell after AI result
+      consultUpsell.style.display = '';
+      // Pre-fill consultation email with hexagram info
+      const consultBtn = document.getElementById('consultBtn') as HTMLAnchorElement;
+      const hexInfo = `第${currentHex.number}卦 ${currentHex.fullName}（${currentHex.name}）`;
+      consultBtn.href = `mailto:contact@zenkami.com?subject=預約易經諮詢&body=您好，我想預約一對一易經諮詢。%0A%0A我的問題是：${encodeURIComponent(question || '（未填寫）')}%0A我的卦象是：${encodeURIComponent(hexInfo)}%0A%0A請問最近有空的時段是？`;
     } catch (err: unknown) {
       aiLoading.style.display = 'none';
-      aiBtnContainer.style.display = '';
+      aiGate.style.display = '';
       const msg = err instanceof Error ? err.message : '未知錯誤';
       aiResult.style.display = '';
       aiResult.innerHTML = `<div style="padding:1rem;background:#fef2f2;border-radius:8px;color:#991b1b;font-size:.9rem">解卦失敗：${msg}。請稍後再試。</div>`;
     }
+  }
+
+  aiEmailForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const emailInput = document.getElementById('aiEmailInput') as HTMLInputElement;
+    const email = emailInput.value.trim();
+    if (!email) return;
+
+    const btn = document.getElementById('aiUnlockBtn') as HTMLButtonElement;
+    btn.textContent = '處理中...';
+    btn.disabled = true;
+
+    // Subscribe email (fire and forget, don't block AI)
+    fetch('/api/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    }).catch(() => {});
+
+    // Request AI interpretation
+    await requestAiInterpretation();
   });
 
   function renderMarkdown(text: string): string {
@@ -477,6 +544,129 @@ const site = 'https://zenkami.com';
   }
   .ai-result-content :global(strong) {
     color: var(--near-black, #1a1a2e);
+  }
+
+  /* Email Gate */
+  .ai-gate {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border: 2px solid var(--jade, #2d8a56);
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(45,138,86,.06), rgba(184,134,11,.04));
+    position: relative;
+    overflow: hidden;
+  }
+  .ai-gate::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--jade, #2d8a56), var(--bronze, #b8860b));
+  }
+  .ai-gate-icon {
+    color: var(--jade, #2d8a56);
+    margin-bottom: .75rem;
+  }
+  .ai-gate-title {
+    font-size: 1.2rem;
+    margin-bottom: .5rem;
+    color: var(--near-black, #1a1a2e);
+  }
+  .ai-gate-desc {
+    font-size: .88rem;
+    color: var(--mid-gray, #6b7280);
+    margin-bottom: 1.25rem;
+    line-height: 1.6;
+  }
+  .ai-gate-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .ai-gate-trust {
+    font-size: .75rem;
+    color: var(--mid-gray, #9ca3af);
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .35rem;
+  }
+
+  /* Consultation Upsell */
+  .consult-upsell {
+    margin-top: 1.5rem;
+    padding: 2rem 1.5rem;
+    background: linear-gradient(135deg, #fffbf0, #f0fdf4);
+    border: 2px solid var(--bronze, #b8860b);
+    border-radius: 16px;
+    text-align: center;
+    position: relative;
+  }
+  .consult-upsell-badge {
+    position: absolute;
+    top: -1px;
+    right: 1.5rem;
+    background: var(--bronze, #b8860b);
+    color: #fff;
+    font-size: .7rem;
+    font-weight: 700;
+    padding: .3rem .75rem;
+    border-radius: 0 0 8px 8px;
+    letter-spacing: .05em;
+  }
+  .consult-upsell-title {
+    font-size: 1.2rem;
+    color: var(--near-black, #1a1a2e);
+    margin-bottom: .75rem;
+  }
+  .consult-upsell-desc {
+    font-size: .88rem;
+    color: var(--mid-gray, #555);
+    margin-bottom: 1.25rem;
+    line-height: 1.7;
+  }
+  .consult-upsell-features {
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .consult-feature {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .88rem;
+    color: var(--near-black, #333);
+  }
+  .consult-upsell-btn {
+    display: inline-block;
+    padding: .85rem 2.5rem;
+    background: var(--bronze, #b8860b);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: all .2s ease;
+    box-shadow: 0 4px 14px rgba(184,134,11,.3);
+  }
+  .consult-upsell-btn:hover {
+    background: #a07608;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(184,134,11,.4);
+  }
+  .consult-upsell-note {
+    font-size: .75rem;
+    color: var(--mid-gray, #9ca3af);
+    margin-top: .75rem;
   }
 </style>
 
