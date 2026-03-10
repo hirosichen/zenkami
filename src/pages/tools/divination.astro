@@ -388,6 +388,11 @@ const site = 'https://zenkami.com';
       document.getElementById('changingLinesSection')!.style.display = 'none';
       document.getElementById('transformedSection')!.style.display = 'none';
     }
+
+    // Auto-scroll to email gate after a brief delay
+    setTimeout(() => {
+      document.getElementById('aiGate')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 600);
   }
 
   // AI Interpretation with Email Gate
@@ -437,6 +442,9 @@ const site = 'https://zenkami.com';
       aiLoading.style.display = 'none';
       aiResult.style.display = '';
       aiResult.innerHTML = renderMarkdown(data.interpretation);
+
+      // Scroll to AI result
+      aiResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
       // Show consultation upsell after AI result
       consultUpsell.style.display = '';
