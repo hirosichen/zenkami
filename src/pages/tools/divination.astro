@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 const site = 'https://zenkami.com';
 ---
 
-<Base title="線上占卦 | 易經研究所" description="免費線上三幣法占卦工具。模擬傳統擲幣過程，即時獲得六十四卦卦象、變爻與詳細解讀。" canonical={`${site}/tools/divination`} keywords="線上占卦,三幣法,免費占卦,易經占卦,擲銅錢,卜卦" activePage="tools">
+<Base title="線上占卦 | 易經研究所" description="免費線上三幣法占卦工具。模擬傳統擲幣過程，即時獲得六十四卦卦象、變爻與 AI 智能解卦。" canonical={`${site}/tools/divination`} keywords="線上占卦,三幣法,免費占卦,易經占卦,擲銅錢,卜卦,AI解卦" activePage="tools">
 
 <section class="page-hero" style="position:relative;overflow:hidden">
   <div class="hero-bg-image" style="opacity:.15">
@@ -46,7 +46,13 @@ const site = 'https://zenkami.com';
           <p class="section-overline" style="font-size:.75rem">占卦結果</p>
           <div id="hexagramViz" style="display:flex;flex-direction:column;align-items:center;gap:6px;margin:1.5rem 0"></div>
           <h2 id="hexagramName" style="font-size:1.75rem;margin-bottom:.25rem"></h2>
-          <p id="hexagramChar" style="color:var(--mid-gray,var(--c-text-muted));font-size:.9rem"></p>
+          <p id="hexagramPinyin" style="color:var(--mid-gray,var(--c-text-muted));font-size:.9rem"></p>
+        </div>
+
+        <!-- Nature & Keywords -->
+        <div id="hexagramMeta" style="margin-bottom:2rem;padding:1rem 1.25rem;background:var(--off-white,#f5f4f0);border-radius:10px;text-align:center">
+          <p id="hexagramNature" style="font-size:.9rem;color:var(--mid-gray,#6b7280);margin-bottom:.5rem"></p>
+          <div id="hexagramKeywords" style="display:flex;gap:.5rem;justify-content:center;flex-wrap:wrap"></div>
         </div>
 
         <!-- Judgment -->
@@ -61,19 +67,42 @@ const site = 'https://zenkami.com';
           <blockquote id="hexagramImage" style="border-left:3px solid var(--bronze,#b8860b);padding:.75rem 1rem;background:var(--bronze-subtle,rgba(184,134,11,.1));border-radius:0 8px 8px 0;font-family:var(--ff-serif);margin:0"></blockquote>
         </div>
 
-        <!-- Changing lines analysis -->
+        <!-- All 6 lines -->
+        <div style="margin-bottom:2rem">
+          <h3 style="font-size:1.1rem;margin-bottom:1rem;color:var(--jade,var(--c-primary))">六爻解析</h3>
+          <div id="allLinesContent"></div>
+        </div>
+
+        <!-- Changing lines highlight -->
         <div id="changingLinesSection" style="display:none;margin-bottom:2rem">
-          <h3 style="font-size:1.1rem;margin-bottom:1rem;color:var(--jade,var(--c-primary))">變爻解析</h3>
+          <h3 style="font-size:1.1rem;margin-bottom:1rem;color:var(--bronze,#b8860b)">動爻提示</h3>
           <div id="changingLinesContent"></div>
         </div>
 
         <!-- Transformed hexagram -->
-        <div id="transformedSection" style="display:none;margin-bottom:2rem;padding:1.5rem;background:var(--jade-subtle,rgba(45,138,86,.08));border-radius:12px;border:1px solid var(--jade,var(--c-primary));border-opacity:.2">
+        <div id="transformedSection" style="display:none;margin-bottom:2rem;padding:1.5rem;background:var(--jade-subtle,rgba(45,138,86,.08));border-radius:12px;border:1px solid rgba(45,138,86,.2)">
           <h3 style="font-size:1.1rem;margin-bottom:1rem;text-align:center">之卦（變卦）</h3>
           <div id="transformedViz" style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:1rem"></div>
           <h4 id="transformedName" style="text-align:center;font-size:1.25rem;margin-bottom:.25rem"></h4>
-          <p id="transformedChar" style="text-align:center;color:var(--mid-gray,var(--c-text-muted));font-size:.85rem;margin-bottom:1rem"></p>
-          <blockquote id="transformedJudgment" style="border-left:3px solid var(--jade,var(--c-primary));padding:.75rem 1rem;background:rgba(255,255,255,.05);border-radius:0 8px 8px 0;font-family:var(--ff-serif);margin:0"></blockquote>
+          <p id="transformedPinyin" style="text-align:center;color:var(--mid-gray,var(--c-text-muted));font-size:.85rem;margin-bottom:1rem"></p>
+          <blockquote id="transformedJudgment" style="border-left:3px solid var(--jade,var(--c-primary));padding:.75rem 1rem;background:rgba(255,255,255,.5);border-radius:0 8px 8px 0;font-family:var(--ff-serif);margin:0"></blockquote>
+        </div>
+
+        <!-- AI Interpretation -->
+        <div id="aiSection" style="margin-bottom:2rem">
+          <div style="text-align:center;padding:1.5rem;border:2px dashed var(--jade,#2d8a56);border-radius:12px;background:var(--jade-subtle,rgba(45,138,86,.04))">
+            <h3 style="font-size:1.1rem;margin-bottom:.5rem;color:var(--jade,var(--c-primary))">AI 智能解卦</h3>
+            <p style="font-size:.85rem;color:var(--mid-gray,#6b7280);margin-bottom:1rem">結合你的問題與卦象，由 AI 為你提供個人化的深度解讀</p>
+            <button id="aiBtn" class="cta-btn cta-btn--primary" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 2rem;border-radius:8px;font-weight:600;cursor:pointer">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 1 4 4v1h1a3 3 0 0 1 3 3v1a3 3 0 0 1-3 3h-1v4a4 4 0 0 1-8 0v-4H7a3 3 0 0 1-3-3v-1a3 3 0 0 1 3-3h1V6a4 4 0 0 1 4-4z"/></svg>
+              AI 解卦
+            </button>
+          </div>
+          <div id="aiLoading" style="display:none;text-align:center;padding:2rem">
+            <div class="ai-spinner"></div>
+            <p style="margin-top:1rem;color:var(--mid-gray,#6b7280);font-size:.9rem">AI 正在為你解讀卦象...</p>
+          </div>
+          <div id="aiResult" style="display:none" class="ai-result-content"></div>
         </div>
 
         <!-- Actions -->
@@ -104,14 +133,19 @@ const site = 'https://zenkami.com';
 
 <script>
   import { hexagrams, getHexagramByNumber, kingWenTable } from '../../lib/hexagrams';
+  import type { Hexagram } from '../../lib/hexagrams';
 
-  // Divination logic (client-side)
   interface LineResult {
     value: 6 | 7 | 8 | 9;
     coins: [number, number, number];
     isYang: boolean;
     isChanging: boolean;
   }
+
+  // Store current result for AI
+  let currentHex: Hexagram | null = null;
+  let currentTransformedHex: Hexagram | null = null;
+  let currentChangingIndices: number[] = [];
 
   function throwCoins(): LineResult {
     const coins: [number, number, number] = [
@@ -143,7 +177,6 @@ const site = 'https://zenkami.com';
     return lineToYinYang(v);
   }
 
-  // Parse query param
   const params = new URLSearchParams(window.location.search);
   const preQ = params.get('q');
   if (preQ) {
@@ -181,13 +214,18 @@ const site = 'https://zenkami.com';
     stepResult.style.display = 'none';
     throwsContainer.innerHTML = '';
 
+    // Reset AI section
+    document.getElementById('aiSection')!.querySelector('div:first-child')!.setAttribute('style', 'text-align:center;padding:1.5rem;border:2px dashed var(--jade,#2d8a56);border-radius:12px;background:var(--jade-subtle,rgba(45,138,86,.04))');
+    (document.getElementById('aiSection')!.querySelector('div:first-child') as HTMLElement).style.display = '';
+    document.getElementById('aiLoading')!.style.display = 'none';
+    document.getElementById('aiResult')!.style.display = 'none';
+
     const lines: LineResult[] = [];
 
     for (let i = 0; i < 6; i++) {
       const result = throwCoins();
       lines.push(result);
 
-      // Animate throw
       const row = document.createElement('div');
       row.style.cssText = 'display:flex;align-items:center;gap:1rem;opacity:0;transition:opacity .4s';
       const label = document.createElement('span');
@@ -223,7 +261,7 @@ const site = 'https://zenkami.com';
     stepThrowing.style.display = 'none';
     stepResult.style.display = '';
 
-    const changingLines = lines.map((l, i) => l.isChanging ? i : -1).filter(i => i >= 0);
+    currentChangingIndices = lines.map((l, i) => l.isChanging ? i : -1).filter(i => i >= 0);
     const primaryYY = lines.map(l => lineToYinYang(l.value));
     const lowerIdx = trigramIndex(primaryYY[0], primaryYY[1], primaryYY[2]);
     const upperIdx = trigramIndex(primaryYY[3], primaryYY[4], primaryYY[5]);
@@ -231,33 +269,60 @@ const site = 'https://zenkami.com';
     const hex = getHexagramByNumber(hexNum);
 
     if (!hex) return;
+    currentHex = hex;
 
-    // Render hexagram visualization (top to bottom = line 6 to line 1)
+    // Render hexagram visualization
     const viz = document.getElementById('hexagramViz')!;
     viz.innerHTML = '';
     for (let i = 5; i >= 0; i--) {
       viz.appendChild(renderHexLine(primaryYY[i] === 1, lines[i].isChanging));
     }
 
-    document.getElementById('hexagramName')!.textContent = `第${hex.number}卦 ${hex.name}`;
-    document.getElementById('hexagramChar')!.textContent = hex.character;
+    document.getElementById('hexagramName')!.textContent = `第${hex.number}卦 ${hex.fullName}（${hex.name}）`;
+    document.getElementById('hexagramPinyin')!.textContent = `${hex.pinyin} ｜ ${hex.element}`;
+    document.getElementById('hexagramNature')!.textContent = hex.nature;
+
+    // Keywords
+    const kwContainer = document.getElementById('hexagramKeywords')!;
+    kwContainer.innerHTML = '';
+    hex.keywords.forEach(kw => {
+      const tag = document.createElement('span');
+      tag.style.cssText = 'padding:.2rem .6rem;background:var(--jade-subtle,rgba(45,138,86,.1));color:var(--jade,#2d8a56);border-radius:20px;font-size:.75rem;font-weight:600';
+      tag.textContent = kw;
+      kwContainer.appendChild(tag);
+    });
+
     document.getElementById('hexagramJudgment')!.textContent = hex.judgment;
     document.getElementById('hexagramImage')!.textContent = hex.image;
+
+    // All 6 lines with text + meaning
+    const allLinesEl = document.getElementById('allLinesContent')!;
+    allLinesEl.innerHTML = '';
+    const posNames = ['初', '二', '三', '四', '五', '上'];
+    hex.lines.forEach((line, idx) => {
+      const isChanging = currentChangingIndices.includes(idx);
+      const div = document.createElement('div');
+      div.style.cssText = `padding:1rem;margin-bottom:.5rem;border-radius:8px;border-left:3px solid ${isChanging ? 'var(--bronze,#b8860b)' : 'var(--jade,#2d8a56)'};background:${isChanging ? 'var(--bronze-subtle,rgba(184,134,11,.1))' : 'var(--off-white,#f5f4f0)'}`;
+      div.innerHTML = `
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.35rem">
+          <span style="font-weight:700;font-size:.8rem;color:${isChanging ? 'var(--bronze,#b8860b)' : 'var(--jade,#2d8a56)'}">第${posNames[idx]}爻${isChanging ? '（動爻）' : ''}</span>
+        </div>
+        <p style="font-family:var(--ff-serif);font-size:.9rem;margin:0 0 .35rem 0">${line.text}</p>
+        <p style="font-size:.8rem;color:var(--mid-gray,#6b7280);margin:0">→ ${line.meaning}</p>
+      `;
+      allLinesEl.appendChild(div);
+    });
 
     // Lookup link
     (document.getElementById('lookupLink') as HTMLAnchorElement).href = `/tools/hexagram-lookup#hex-${hex.number}`;
 
-    // Changing lines
-    if (changingLines.length > 0) {
+    // Changing lines highlight
+    if (currentChangingIndices.length > 0) {
       document.getElementById('changingLinesSection')!.style.display = '';
       const content = document.getElementById('changingLinesContent')!;
-      content.innerHTML = '';
-      changingLines.forEach(idx => {
-        const div = document.createElement('div');
-        div.style.cssText = 'padding:1rem;margin-bottom:.75rem;background:var(--bronze-subtle,rgba(184,134,11,.1));border-radius:8px;border-left:3px solid var(--bronze,#b8860b)';
-        div.innerHTML = `<p style="font-weight:600;margin-bottom:.25rem;font-size:.9rem">第${idx+1}爻（變爻）</p><p style="font-family:var(--ff-serif);font-size:.9rem;margin:0">${hex.lineTexts[idx]}</p>`;
-        content.appendChild(div);
-      });
+      content.innerHTML = `<p style="font-size:.9rem;color:var(--mid-gray,#6b7280);margin:0">
+        本次占卦共有 <strong style="color:var(--bronze,#b8860b)">${currentChangingIndices.length}</strong> 個動爻（${currentChangingIndices.map(i => `第${posNames[i]}爻`).join('、')}），代表卦象正處於變動之中。動爻是解卦的重點，它暗示著當前局勢的轉折方向。
+      </p>`;
 
       // Transformed hexagram
       const transYY = lines.map(l => lineToTransformed(l.value));
@@ -267,20 +332,94 @@ const site = 'https://zenkami.com';
       const tHex = getHexagramByNumber(tHexNum);
 
       if (tHex) {
+        currentTransformedHex = tHex;
         document.getElementById('transformedSection')!.style.display = '';
         const tViz = document.getElementById('transformedViz')!;
         tViz.innerHTML = '';
         for (let i = 5; i >= 0; i--) {
           tViz.appendChild(renderHexLine(transYY[i] === 1, false));
         }
-        document.getElementById('transformedName')!.textContent = `第${tHex.number}卦 ${tHex.name}`;
-        document.getElementById('transformedChar')!.textContent = tHex.character;
+        document.getElementById('transformedName')!.textContent = `第${tHex.number}卦 ${tHex.fullName}（${tHex.name}）`;
+        document.getElementById('transformedPinyin')!.textContent = tHex.pinyin;
         document.getElementById('transformedJudgment')!.textContent = tHex.judgment;
       }
     } else {
+      currentTransformedHex = null;
       document.getElementById('changingLinesSection')!.style.display = 'none';
       document.getElementById('transformedSection')!.style.display = 'none';
     }
+  }
+
+  // AI Interpretation
+  const aiBtn = document.getElementById('aiBtn')!;
+  aiBtn.addEventListener('click', async () => {
+    if (!currentHex) return;
+
+    const question = (document.getElementById('questionInput') as HTMLTextAreaElement).value.trim();
+    const aiBtnContainer = document.getElementById('aiSection')!.querySelector('div:first-child') as HTMLElement;
+    const aiLoading = document.getElementById('aiLoading')!;
+    const aiResult = document.getElementById('aiResult')!;
+
+    aiBtnContainer.style.display = 'none';
+    aiLoading.style.display = '';
+    aiResult.style.display = 'none';
+
+    const changingLines = currentChangingIndices.map(idx => ({
+      position: idx + 1,
+      text: currentHex!.lines[idx].text,
+      meaning: currentHex!.lines[idx].meaning,
+    }));
+
+    try {
+      const res = await fetch('/api/interpret', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question: question || undefined,
+          hexagramName: currentHex.name,
+          hexagramFullName: currentHex.fullName,
+          hexagramNumber: currentHex.number,
+          judgment: currentHex.judgment,
+          image: currentHex.image,
+          nature: currentHex.nature,
+          keywords: currentHex.keywords,
+          changingLines,
+          transformedName: currentTransformedHex?.fullName,
+          transformedJudgment: currentTransformedHex?.judgment,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      aiLoading.style.display = 'none';
+      aiResult.style.display = '';
+      aiResult.innerHTML = renderMarkdown(data.interpretation);
+    } catch (err: unknown) {
+      aiLoading.style.display = 'none';
+      aiBtnContainer.style.display = '';
+      const msg = err instanceof Error ? err.message : '未知錯誤';
+      aiResult.style.display = '';
+      aiResult.innerHTML = `<div style="padding:1rem;background:#fef2f2;border-radius:8px;color:#991b1b;font-size:.9rem">解卦失敗：${msg}。請稍後再試。</div>`;
+    }
+  });
+
+  function renderMarkdown(text: string): string {
+    return text
+      .replace(/^## (.+)$/gm, '<h3 class="ai-heading">$1</h3>')
+      .replace(/^### (.+)$/gm, '<h4 class="ai-subheading">$1</h4>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n\n/g, '</p><p>')
+      .replace(/\n- /g, '</p><li>')
+      .replace(/\n/g, '<br>')
+      .replace(/<\/p><li>/g, '</p><ul><li>')
+      .replace(/<li>([^<]*?)(?=<\/p>|<li>|$)/g, '<li>$1</li>')
+      .replace(/(<\/li>)(?![\s\S]*<li>)/g, '$1</ul>')
+      .replace(/^/, '<p>')
+      .replace(/$/, '</p>');
   }
 
   startBtn.addEventListener('click', runDivination);
@@ -288,6 +427,9 @@ const site = 'https://zenkami.com';
     stepQuestion.style.display = '';
     stepThrowing.style.display = 'none';
     stepResult.style.display = 'none';
+    currentHex = null;
+    currentTransformedHex = null;
+    currentChangingIndices = [];
   });
 </script>
 
@@ -295,6 +437,46 @@ const site = 'https://zenkami.com';
   @keyframes pulse-line {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.5; }
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .ai-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--light-gray, #e5e5e8);
+    border-top-color: var(--jade, #2d8a56);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+    margin: 0 auto;
+  }
+  .ai-result-content {
+    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--jade-subtle, rgba(45,138,86,.06)), var(--bronze-subtle, rgba(184,134,11,.06)));
+    border-radius: 12px;
+    border: 1px solid rgba(45,138,86,.15);
+    line-height: 1.8;
+    font-size: .92rem;
+  }
+  .ai-result-content :global(h3.ai-heading) {
+    font-size: 1.1rem;
+    color: var(--jade, #2d8a56);
+    margin: 1.5rem 0 .75rem;
+    padding-bottom: .5rem;
+    border-bottom: 1px solid rgba(45,138,86,.15);
+  }
+  .ai-result-content :global(h3.ai-heading:first-child) {
+    margin-top: 0;
+  }
+  .ai-result-content :global(ul) {
+    padding-left: 1.25rem;
+    margin: .5rem 0;
+  }
+  .ai-result-content :global(li) {
+    margin-bottom: .35rem;
+  }
+  .ai-result-content :global(strong) {
+    color: var(--near-black, #1a1a2e);
   }
 </style>
 

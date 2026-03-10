@@ -3,6 +3,19 @@ import Base from '../../layouts/Base.astro';
 import { hexagrams } from '../../lib/hexagrams';
 import { trigrams } from '../../lib/trigrams';
 const site = 'https://zenkami.com';
+
+// Compute binary lines for each hexagram for rendering
+const trigramBits: Record<number, number[]> = {
+  0:[1,1,1], 1:[0,1,1], 2:[1,0,1], 3:[1,0,0],
+  4:[0,1,1], 5:[0,1,0], 6:[1,0,0], 7:[0,0,0]
+};
+function getHexLines(upper: number, lower: number): number[] {
+  return [...(trigramBits[lower] || [0,0,0]), ...(trigramBits[upper] || [0,0,0])];
+}
+const hexagramsWithLines = hexagrams.map(h => ({
+  ...h,
+  binaryLines: getHexLines(h.upperTrigram, h.lowerTrigram),
+}));
 ---
 
 <Base title="六十四卦查詢 | 易經研究所" description="完整收錄易經六十四卦——卦辭、爻辭、象傳一覽無遺。支援搜尋、八卦組合篩選，是你的易經百科全書。" canonical={`${site}/tools/hexagram-lookup`} keywords="六十四卦,卦象查詢,易經百科,卦辭,爻辭,象傳" activePage="hexagrams">
@@ -44,16 +57,16 @@ const site = 'https://zenkami.com';
 
     <!-- Hexagram Grid -->
     <div class="hex-grid" id="hexGrid">
-      {hexagrams.map(h => (
-        <div class="hex-card" data-number={h.number} data-name={h.name} data-char={h.character} data-upper={h.upperTrigram} data-lower={h.lowerTrigram} data-judgment={h.judgment} id={`hex-${h.number}`}>
+      {hexagramsWithLines.map(h => (
+        <div class="hex-card" data-number={h.number} data-name={h.name} data-fullname={h.fullName} data-upper={h.upperTrigram} data-lower={h.lowerTrigram} data-judgment={h.judgment} id={`hex-${h.number}`}>
           <div class="hex-card-number">{h.number}</div>
           <div class="hex-card-lines">
-            {[...h.lines].reverse().map(l => (
+            {[...h.binaryLines].reverse().map(l => (
               <div class:list={['hex-mini-line', l === 1 ? 'hex-mini-line--yang' : 'hex-mini-line--yin']} />
             ))}
           </div>
           <div class="hex-card-name">{h.name}</div>
-          <div class="hex-card-char">{h.character}</div>
+          <div class="hex-card-char">{h.fullName}</div>
         </div>
       ))}
     </div>
@@ -246,10 +259,12 @@ const site = 'https://zenkami.com';
       return `<div style="width:80px;display:flex;justify-content:space-between;margin:3px auto"><div style="width:32px;height:8px;background:var(--jade,#2d8a56);border-radius:2px"></div><div style="width:32px;height:8px;background:var(--jade,#2d8a56);border-radius:2px"></div></div>`;
     }).join('');
 
-    const lineTextsHtml = hex.lineTexts.map((t, i) =>
+    const posNames = ['初', '二', '三', '四', '五', '上'];
+    const lineTextsHtml = hex.lines.map((l: { text: string; meaning: string }, i: number) =>
       `<div style="padding:.75rem;margin-bottom:.5rem;background:var(--off-white,#f5f4f0);border-radius:8px;border-left:3px solid var(--jade,#2d8a56)">
-        <p style="font-weight:600;font-size:.8rem;margin-bottom:.25rem;color:var(--jade,#2d8a56)">第${i+1}爻</p>
-        <p style="font-family:var(--ff-serif);font-size:.9rem;margin:0">${t}</p>
+        <p style="font-weight:600;font-size:.8rem;margin-bottom:.25rem;color:var(--jade,#2d8a56)">第${posNames[i]}爻</p>
+        <p style="font-family:var(--ff-serif);font-size:.9rem;margin:0 0 .3rem 0">${l.text}</p>
+        <p style="font-size:.8rem;color:var(--mid-gray,#6b7280);margin:0">→ ${l.meaning}</p>
       </div>`
     ).join('');
 
@@ -258,7 +273,11 @@ const site = 'https://zenkami.com';
         <p style="font-size:.75rem;color:var(--mid-gray,#6b7280);margin-bottom:.5rem">第 ${hex.number} 卦</p>
         <div style="margin-bottom:1rem">${linesHtml}</div>
         <h2 style="font-size:1.75rem;margin-bottom:.25rem;font-family:var(--ff-serif)">${hex.name} <span style="font-size:.9rem;font-weight:400;color:var(--mid-gray,#6b7280)">${hex.pinyin}</span></h2>
-        <p style="color:var(--mid-gray,#6b7280)">${hex.character}｜上卦 ${hex.upperTrigram}・下卦 ${hex.lowerTrigram}</p>
+        <p style="color:var(--mid-gray,#6b7280)">${hex.fullName}｜${hex.pinyin}｜${hex.element}</p>
+        <p style="font-size:.85rem;color:var(--mid-gray,#6b7280);margin-top:.5rem">${hex.nature}</p>
+        <div style="display:flex;gap:.4rem;justify-content:center;flex-wrap:wrap;margin-top:.5rem">
+          ${hex.keywords.map((k: string) => `<span style="padding:.15rem .5rem;background:var(--jade-subtle,rgba(45,138,86,.1));color:var(--jade,#2d8a56);border-radius:20px;font-size:.7rem;font-weight:600">${k}</span>`).join('')}
+        </div>
       </div>
       <div style="margin-bottom:1.5rem">
         <h3 style="font-size:1rem;margin-bottom:.5rem;color:var(--jade,#2d8a56)">卦辭</h3>
