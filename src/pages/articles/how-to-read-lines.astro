@@ -1,0 +1,138 @@
+---
+import Base from '../../layouts/Base.astro';
+const site = 'https://yijin.builtbyclaw.com';
+const title = '爻辭解讀指南：初學者必讀';
+const description = '系統性教學如何閱讀與理解易經爻辭，掌握爻位、承乘應比等基本概念，建立易經解讀的基本功。';
+const schema = JSON.stringify({ "@context": "https://schema.org", "@type": "BlogPosting", "headline": title, "description": description, "datePublished": "2026-02-18", "dateModified": "2026-02-18", "author": { "@type": "Organization", "name": "易經研究所" }, "publisher": { "@type": "Organization", "name": "易經研究所" } });
+---
+
+<Base title={`${title} | 易經研究所`} description={description} canonical={`${site}/articles/how-to-read-lines`} keywords="爻辭,爻辭解讀,易經入門,爻位,承乘應比,初學者指南" schema={schema} ogType="article" ogImage="https://yijin.builtbyclaw.com/articles/hero/article-read-lines.webp" articleSection="爻辭探討" activePage="articles">
+
+<section class="article-hero article-hero--with-bg">
+  <div class="hero-bg-image">
+    <img src="/articles/hero/article-read-lines.webp" alt="" loading="eager" fetchpriority="high" width="800" height="420" />
+  </div>
+  <div class="article-hero-inner">
+    <div class="container">
+      <span class="section-overline">爻辭探討</span>
+      <h1>{title}</h1>
+      <div class="article-meta">
+        <span>2026-02-18</span>
+        <span>閱讀時間：11 分鐘</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="article-body">
+  <p class="article-lead">
+    當你完成一次占卦，得到了一個六十四卦中的卦象後，接下來最重要的就是閱讀和理解爻辭。爻辭是對每一爻（卦中的每一條線）所處情境的描述與判斷，是占卦解讀中最精細也最豐富的部分。但對初學者而言，爻辭的古文措辭和象徵手法常常令人困惑。本文將系統性地教你如何閱讀爻辭。
+  </p>
+
+  <h2>什麼是爻辭？</h2>
+  <p>
+    每一卦有六條爻，從下到上分別稱為初、二、三、四、五、上。陽爻稱「九」，陰爻稱「六」。因此，一個卦的六條爻辭會以「初九」或「初六」、「九二」或「六二」……「上九」或「上六」來標記。
+  </p>
+  <p>
+    例如，乾卦六爻皆陽，所以依序為：初九、九二、九三、九四、九五、上九。坤卦六爻皆陰，所以依序為：初六、六二、六三、六四、六五、上六。
+  </p>
+  <p>
+    爻辭的功能是描述處於該位置的爻所面臨的情境，並給出吉凶判斷。它通常包含一個象徵性的描述（比喻或故事），以及一個結論性的判斷詞（如吉、凶、悔、吝、無咎等）。
+  </p>
+
+  <h2>爻辭中的判斷詞</h2>
+  <p>
+    易經的判斷體系比「好」或「壞」要精細得多。常見的判斷詞有：
+  </p>
+  <ul>
+    <li><strong>吉</strong>——好的結果，順利。最正面的判斷。</li>
+    <li><strong>凶</strong>——不好的結果，有災禍。最負面的判斷。</li>
+    <li><strong>悔</strong>——後悔、懊惱，但程度較輕，且往往暗示從中學到教訓。</li>
+    <li><strong>吝</strong>——困難、吝嗇、不順暢，比悔更消極。</li>
+    <li><strong>無咎</strong>——沒有過錯。注意這不等於「吉」，而是說雖然處境不完美，但你的行為沒有問題。</li>
+    <li><strong>厲</strong>——危險、嚴峻，但通常暗示可以克服。</li>
+    <li><strong>亨</strong>——亨通、順暢。</li>
+    <li><strong>利</strong>——有利於某事。後面通常會跟著具體條件。</li>
+  </ul>
+  <p>
+    理解這些判斷詞是閱讀爻辭的第一步。特別要注意的是，易經的吉凶不是絕對的——同一個爻中可能既有「厲」又有「無咎」，表示雖然處境危險但最終無恙。
+  </p>
+
+  <h2>爻位的意義</h2>
+  <p>
+    六條爻所處的位置不同，象徵意義也不同：
+  </p>
+  <ul>
+    <li><strong>初爻</strong>——事物的開始，地位最低，剛剛踏入某個情境。通常較為謹慎。</li>
+    <li><strong>二爻</strong>——內卦（下卦）的中位，象徵中道。臣子之位，柔順中正者在此位最吉。</li>
+    <li><strong>三爻</strong>——內卦之頂，即將進入外卦（上卦），處於過渡、不安定的位置。常有險象。</li>
+    <li><strong>四爻</strong>——外卦之底，近君（五爻）之位，敏感而需要謹慎。</li>
+    <li><strong>五爻</strong>——外卦的中位，象徵君主或領導者。整卦最尊的位置。</li>
+    <li><strong>上爻</strong>——事物的終結，已經超出最佳位置，往往有盛極而衰的意味。</li>
+  </ul>
+  <p>
+    此外，一、三、五為陽位（奇數），二、四、上為陰位（偶數）。陽爻處陽位、陰爻處陰位稱為「得位」或「當位」，通常較為吉利。反之則為「不當位」，可能帶來不順。
+  </p>
+
+  <div class="inline-cta">
+    <p>理論學得差不多了？來實際占卦試試看吧！</p>
+    <a href="/tools/divination" class="cta-btn cta-btn--primary" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;border-radius:8px;font-weight:600;text-decoration:none">免費線上占卦</a>
+  </div>
+
+  <h2>承、乘、比、應的關係</h2>
+  <p>
+    爻與爻之間存在四種基本關係，理解這些關係有助於更深入地解讀爻辭：
+  </p>
+  <p>
+    <strong>承與乘</strong>——相鄰兩爻之間的關係。陰爻在陽爻之下稱「承」（承托），暗示支持、順從，通常較好。陰爻在陽爻之上稱「乘」（凌乘），暗示以柔凌剛、不順，通常不利。
+  </p>
+  <p>
+    <strong>比</strong>——相鄰兩爻之間若為一陰一陽，則稱為「比」（親近）。兩陽或兩陰相鄰則為「敵」，較不和諧。
+  </p>
+  <p>
+    <strong>應</strong>——初與四、二與五、三與上，這三對爻稱為「應」的關係。若一對中恰好一陰一陽，就稱為「有應」，代表遙相呼應、互相支持。若同為陰或同為陽，則「無應」，缺乏外援。
+  </p>
+  <p>
+    這些概念在《小象傳》中經常被用來解釋爻辭的吉凶。例如，某爻的爻辭說「吉」，而《小象傳》會解釋：「以中正也」（因為處於中位且得正）。
+  </p>
+
+  <h2>如何實際解讀一條爻辭</h2>
+  <p>
+    讓我們以一個具體例子來示範。假設你占得屯卦（第3卦，水雷屯），且第二爻為變爻。
+  </p>
+  <p>
+    <strong>六二：「屯如邅如，乘馬班如，匪寇婚媾。女子貞不字，十年乃字。」</strong>
+  </p>
+  <p>
+    解讀步驟：
+  </p>
+  <ol>
+    <li><strong>看位置</strong>：六二，陰爻處陰位（二為偶數），得位。且居下卦中位，象徵中正。基本條件良好。</li>
+    <li><strong>看關係</strong>：六二與九五有應（一陰一陽），遠方有援助。但六二與初九相比（相鄰且陰陽不同），受到初九的牽制。</li>
+    <li><strong>看象徵</strong>：「屯如邅如」形容進退兩難的困頓；「乘馬班如」形容騎馬卻徘徊不前；「匪寇婚媾」——看似來犯的不是強盜，而是來求婚的人。</li>
+    <li><strong>看判斷</strong>：「女子貞不字，十年乃字」——守正不急於嫁人，十年後才嫁。暗示此時不是行動的好時機，需要長期等待。</li>
+    <li><strong>綜合判斷</strong>：雖然處境困難、進退兩難，但只要堅守正道、耐心等待，最終會有好的結果。</li>
+  </ol>
+
+  <h2>關於變爻的特別說明</h2>
+  <p>
+    在實際占卦中，最需要重點關注的就是「變爻」（也叫「動爻」）——也就是老陽（9）或老陰（6）所在的位置。變爻代表正在變化的力量，其爻辭對你的問題最具針對性。
+  </p>
+  <p>
+    關於變爻的詳細解說，包括如何根據變爻數量來決定解讀重點，請參考我們的專題文章：<a href="/articles/changing-lines-guide">變爻的奧秘：動爻如何改變卦義</a>。
+  </p>
+  <p>
+    如果你想要更全面地了解每一卦的爻辭，可以使用我們的<a href="/tools/hexagram-lookup">六十四卦查詢工具</a>，裡面收錄了完整的卦辭、爻辭與象傳。
+  </p>
+
+  <div class="article-footnotes">
+    <h4>參考資料</h4>
+    <ol>
+      <li>高亨，《周易古經今注》，中華書局。</li>
+      <li>黃壽祺、張善文，《周易譯注》，上海古籍出版社。</li>
+      <li>傅佩榮，《解讀易經》，立緒文化。</li>
+    </ol>
+  </div>
+</div>
+
+</Base>

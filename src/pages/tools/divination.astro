@@ -1,0 +1,301 @@
+---
+import Base from '../../layouts/Base.astro';
+const site = 'https://yijin.builtbyclaw.com';
+---
+
+<Base title="線上占卦 | 易經研究所" description="免費線上三幣法占卦工具。模擬傳統擲幣過程，即時獲得六十四卦卦象、變爻與詳細解讀。" canonical={`${site}/tools/divination`} keywords="線上占卦,三幣法,免費占卦,易經占卦,擲銅錢,卜卦" activePage="tools">
+
+<section class="page-hero" style="position:relative;overflow:hidden">
+  <div class="hero-bg-image" style="opacity:.15">
+    <img src="/images/hero/scholar-divination.webp" alt="" loading="eager" fetchpriority="high" width="1200" height="630" />
+  </div>
+  <div class="container" style="position:relative;z-index:1">
+    <p class="section-overline">免費占卦工具</p>
+    <h1>線上三幣法占卦</h1>
+    <p>模擬傳統三枚銅錢占卦法，六次擲幣即得卦象。帶著你的問題，讓易經為你指引方向。</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:1rem">
+  <div class="container" style="max-width:720px">
+
+    <!-- Step 1: Question -->
+    <div id="step-question" class="divination-step">
+      <div class="card" style="text-align:center;padding:2.5rem">
+        <h2 style="font-size:1.3rem;margin-bottom:1rem">在心中默想你的問題</h2>
+        <p style="color:var(--mid-gray,var(--c-text-muted));margin-bottom:1.5rem;font-size:.9rem">可以在下方輸入問題（選填），或直接開始占卦。建議問題明確、具體。</p>
+        <div style="margin-bottom:1.5rem">
+          <textarea id="questionInput" class="form-input" placeholder="例如：我應該接受這份新工作嗎？" rows="3" style="resize:vertical"></textarea>
+        </div>
+        <button id="startBtn" class="cta-btn cta-btn--primary" style="display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:8px;font-weight:600;font-size:1rem;cursor:pointer">開始占卦</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Coin throws animation -->
+    <div id="step-throwing" class="divination-step" style="display:none">
+      <div class="card" style="text-align:center;padding:2.5rem">
+        <h2 style="font-size:1.3rem;margin-bottom:1.5rem">擲幣中...</h2>
+        <div id="throwsContainer" style="display:flex;flex-direction:column;gap:1rem;align-items:center"></div>
+      </div>
+    </div>
+
+    <!-- Step 3: Result -->
+    <div id="step-result" class="divination-step" style="display:none">
+      <div class="card" style="padding:2rem">
+        <div style="text-align:center;margin-bottom:2rem">
+          <p class="section-overline" style="font-size:.75rem">占卦結果</p>
+          <div id="hexagramViz" style="display:flex;flex-direction:column;align-items:center;gap:6px;margin:1.5rem 0"></div>
+          <h2 id="hexagramName" style="font-size:1.75rem;margin-bottom:.25rem"></h2>
+          <p id="hexagramChar" style="color:var(--mid-gray,var(--c-text-muted));font-size:.9rem"></p>
+        </div>
+
+        <!-- Judgment -->
+        <div style="margin-bottom:2rem">
+          <h3 style="font-size:1.1rem;margin-bottom:.5rem;color:var(--jade,var(--c-primary))">卦辭</h3>
+          <blockquote id="hexagramJudgment" style="border-left:3px solid var(--jade,var(--c-primary));padding:.75rem 1rem;background:var(--jade-subtle,rgba(45,138,86,.08));border-radius:0 8px 8px 0;font-family:var(--ff-serif);margin:0"></blockquote>
+        </div>
+
+        <!-- Image -->
+        <div style="margin-bottom:2rem">
+          <h3 style="font-size:1.1rem;margin-bottom:.5rem;color:var(--jade,var(--c-primary))">象傳</h3>
+          <blockquote id="hexagramImage" style="border-left:3px solid var(--bronze,#b8860b);padding:.75rem 1rem;background:var(--bronze-subtle,rgba(184,134,11,.1));border-radius:0 8px 8px 0;font-family:var(--ff-serif);margin:0"></blockquote>
+        </div>
+
+        <!-- Changing lines analysis -->
+        <div id="changingLinesSection" style="display:none;margin-bottom:2rem">
+          <h3 style="font-size:1.1rem;margin-bottom:1rem;color:var(--jade,var(--c-primary))">變爻解析</h3>
+          <div id="changingLinesContent"></div>
+        </div>
+
+        <!-- Transformed hexagram -->
+        <div id="transformedSection" style="display:none;margin-bottom:2rem;padding:1.5rem;background:var(--jade-subtle,rgba(45,138,86,.08));border-radius:12px;border:1px solid var(--jade,var(--c-primary));border-opacity:.2">
+          <h3 style="font-size:1.1rem;margin-bottom:1rem;text-align:center">之卦（變卦）</h3>
+          <div id="transformedViz" style="display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:1rem"></div>
+          <h4 id="transformedName" style="text-align:center;font-size:1.25rem;margin-bottom:.25rem"></h4>
+          <p id="transformedChar" style="text-align:center;color:var(--mid-gray,var(--c-text-muted));font-size:.85rem;margin-bottom:1rem"></p>
+          <blockquote id="transformedJudgment" style="border-left:3px solid var(--jade,var(--c-primary));padding:.75rem 1rem;background:rgba(255,255,255,.05);border-radius:0 8px 8px 0;font-family:var(--ff-serif);margin:0"></blockquote>
+        </div>
+
+        <!-- Actions -->
+        <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem">
+          <button id="retryBtn" class="cta-btn cta-btn--secondary" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;border-radius:8px;font-weight:600;cursor:pointer">重新占卦</button>
+          <a id="lookupLink" href="/tools/hexagram-lookup" class="cta-btn cta-btn--primary" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;border-radius:8px;font-weight:600;text-decoration:none">查看完整卦象</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Methodology section -->
+<section class="section" style="padding-top:3rem;border-top:1px solid var(--border-color,#e5e5e8)">
+  <div class="container" style="max-width:720px">
+    <h2 style="font-size:1.3rem;margin-bottom:1rem;text-align:center">關於三幣法</h2>
+    <p style="color:var(--mid-gray,var(--c-text-muted));text-align:center;max-width:600px;margin:0 auto 1.5rem;font-size:.9rem">
+      三幣法是最常用的易經占卦方法。使用三枚銅錢（正面為 3、反面為 2），每次擲出三枚銅錢，
+      將三枚銅錢的數字相加：6 為老陰（變爻）、7 為少陽、8 為少陰、9 為老陽（變爻）。
+      連續擲六次，由下往上排列，即得一卦。
+    </p>
+    <div style="text-align:center">
+      <a href="/articles/three-coins-method" style="color:var(--jade,var(--c-primary));font-size:.9rem">了解更多三幣法的細節 &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { hexagrams, getHexagramByNumber, kingWenTable } from '../../lib/hexagrams';
+
+  // Divination logic (client-side)
+  interface LineResult {
+    value: 6 | 7 | 8 | 9;
+    coins: [number, number, number];
+    isYang: boolean;
+    isChanging: boolean;
+  }
+
+  function throwCoins(): LineResult {
+    const coins: [number, number, number] = [
+      Math.random() < 0.5 ? 2 : 3,
+      Math.random() < 0.5 ? 2 : 3,
+      Math.random() < 0.5 ? 2 : 3,
+    ];
+    const sum = coins[0] + coins[1] + coins[2];
+    return {
+      value: sum as 6 | 7 | 8 | 9,
+      coins,
+      isYang: sum === 7 || sum === 9,
+      isChanging: sum === 6 || sum === 9,
+    };
+  }
+
+  function trigramIndex(l1: number, l2: number, l3: number): number {
+    const bin = l3 * 4 + l2 * 2 + l1;
+    return 7 - bin;
+  }
+
+  function lineToYinYang(v: number): number {
+    return (v === 7 || v === 9) ? 1 : 0;
+  }
+
+  function lineToTransformed(v: number): number {
+    if (v === 9) return 0;
+    if (v === 6) return 1;
+    return lineToYinYang(v);
+  }
+
+  // Parse query param
+  const params = new URLSearchParams(window.location.search);
+  const preQ = params.get('q');
+  if (preQ) {
+    const input = document.getElementById('questionInput') as HTMLTextAreaElement;
+    if (input) input.value = preQ;
+  }
+
+  const stepQuestion = document.getElementById('step-question')!;
+  const stepThrowing = document.getElementById('step-throwing')!;
+  const stepResult = document.getElementById('step-result')!;
+  const startBtn = document.getElementById('startBtn')!;
+  const retryBtn = document.getElementById('retryBtn')!;
+  const throwsContainer = document.getElementById('throwsContainer')!;
+
+  function renderHexLine(isYang: boolean, isChanging: boolean): HTMLElement {
+    const line = document.createElement('div');
+    line.style.cssText = 'width:100px;height:10px;display:flex;justify-content:space-between;position:relative';
+    if (isYang) {
+      line.innerHTML = `<div style="width:100%;height:100%;background:var(--jade,#2d8a56);border-radius:2px;${isChanging?'animation:pulse-line 1.5s infinite':''}"></div>`;
+    } else {
+      line.innerHTML = `<div style="width:42px;height:100%;background:var(--jade,#2d8a56);border-radius:2px;${isChanging?'animation:pulse-line 1.5s infinite':''}"></div><div style="width:42px;height:100%;background:var(--jade,#2d8a56);border-radius:2px;${isChanging?'animation:pulse-line 1.5s infinite':''}"></div>`;
+    }
+    if (isChanging) {
+      const marker = document.createElement('span');
+      marker.textContent = isYang ? 'o' : 'x';
+      marker.style.cssText = 'position:absolute;right:-20px;top:50%;transform:translateY(-50%);font-size:.7rem;color:var(--bronze,#b8860b)';
+      line.appendChild(marker);
+    }
+    return line;
+  }
+
+  async function runDivination() {
+    stepQuestion.style.display = 'none';
+    stepThrowing.style.display = '';
+    stepResult.style.display = 'none';
+    throwsContainer.innerHTML = '';
+
+    const lines: LineResult[] = [];
+
+    for (let i = 0; i < 6; i++) {
+      const result = throwCoins();
+      lines.push(result);
+
+      // Animate throw
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:1rem;opacity:0;transition:opacity .4s';
+      const label = document.createElement('span');
+      label.style.cssText = 'font-size:.85rem;color:var(--mid-gray,#6b7280);min-width:50px';
+      label.textContent = `第${i+1}爻`;
+      const coins = document.createElement('div');
+      coins.style.cssText = 'display:flex;gap:.5rem';
+      result.coins.forEach(c => {
+        const coin = document.createElement('span');
+        coin.style.cssText = 'width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.9rem;background:var(--bronze,#b8860b);color:var(--near-black,#1a1a2e)';
+        coin.textContent = c === 3 ? '正' : '反';
+        coins.appendChild(coin);
+      });
+      const val = document.createElement('span');
+      val.style.cssText = 'font-size:.85rem;font-weight:600;min-width:60px';
+      const labels: Record<number,string> = {6:'老陰 ⚋',7:'少陽 ⚊',8:'少陰 ⚋',9:'老陽 ⚊'};
+      val.textContent = `= ${result.value} ${labels[result.value]}`;
+      if (result.isChanging) val.style.color = 'var(--bronze,#b8860b)';
+      row.appendChild(label);
+      row.appendChild(coins);
+      row.appendChild(val);
+      throwsContainer.appendChild(row);
+
+      await new Promise(r => setTimeout(r, 600));
+      row.style.opacity = '1';
+    }
+
+    await new Promise(r => setTimeout(r, 800));
+    showResult(lines);
+  }
+
+  function showResult(lines: LineResult[]) {
+    stepThrowing.style.display = 'none';
+    stepResult.style.display = '';
+
+    const changingLines = lines.map((l, i) => l.isChanging ? i : -1).filter(i => i >= 0);
+    const primaryYY = lines.map(l => lineToYinYang(l.value));
+    const lowerIdx = trigramIndex(primaryYY[0], primaryYY[1], primaryYY[2]);
+    const upperIdx = trigramIndex(primaryYY[3], primaryYY[4], primaryYY[5]);
+    const hexNum = kingWenTable[lowerIdx][upperIdx];
+    const hex = getHexagramByNumber(hexNum);
+
+    if (!hex) return;
+
+    // Render hexagram visualization (top to bottom = line 6 to line 1)
+    const viz = document.getElementById('hexagramViz')!;
+    viz.innerHTML = '';
+    for (let i = 5; i >= 0; i--) {
+      viz.appendChild(renderHexLine(primaryYY[i] === 1, lines[i].isChanging));
+    }
+
+    document.getElementById('hexagramName')!.textContent = `第${hex.number}卦 ${hex.name}`;
+    document.getElementById('hexagramChar')!.textContent = hex.character;
+    document.getElementById('hexagramJudgment')!.textContent = hex.judgment;
+    document.getElementById('hexagramImage')!.textContent = hex.image;
+
+    // Lookup link
+    (document.getElementById('lookupLink') as HTMLAnchorElement).href = `/tools/hexagram-lookup#hex-${hex.number}`;
+
+    // Changing lines
+    if (changingLines.length > 0) {
+      document.getElementById('changingLinesSection')!.style.display = '';
+      const content = document.getElementById('changingLinesContent')!;
+      content.innerHTML = '';
+      changingLines.forEach(idx => {
+        const div = document.createElement('div');
+        div.style.cssText = 'padding:1rem;margin-bottom:.75rem;background:var(--bronze-subtle,rgba(184,134,11,.1));border-radius:8px;border-left:3px solid var(--bronze,#b8860b)';
+        div.innerHTML = `<p style="font-weight:600;margin-bottom:.25rem;font-size:.9rem">第${idx+1}爻（變爻）</p><p style="font-family:var(--ff-serif);font-size:.9rem;margin:0">${hex.lineTexts[idx]}</p>`;
+        content.appendChild(div);
+      });
+
+      // Transformed hexagram
+      const transYY = lines.map(l => lineToTransformed(l.value));
+      const tLowerIdx = trigramIndex(transYY[0], transYY[1], transYY[2]);
+      const tUpperIdx = trigramIndex(transYY[3], transYY[4], transYY[5]);
+      const tHexNum = kingWenTable[tLowerIdx][tUpperIdx];
+      const tHex = getHexagramByNumber(tHexNum);
+
+      if (tHex) {
+        document.getElementById('transformedSection')!.style.display = '';
+        const tViz = document.getElementById('transformedViz')!;
+        tViz.innerHTML = '';
+        for (let i = 5; i >= 0; i--) {
+          tViz.appendChild(renderHexLine(transYY[i] === 1, false));
+        }
+        document.getElementById('transformedName')!.textContent = `第${tHex.number}卦 ${tHex.name}`;
+        document.getElementById('transformedChar')!.textContent = tHex.character;
+        document.getElementById('transformedJudgment')!.textContent = tHex.judgment;
+      }
+    } else {
+      document.getElementById('changingLinesSection')!.style.display = 'none';
+      document.getElementById('transformedSection')!.style.display = 'none';
+    }
+  }
+
+  startBtn.addEventListener('click', runDivination);
+  retryBtn.addEventListener('click', () => {
+    stepQuestion.style.display = '';
+    stepThrowing.style.display = 'none';
+    stepResult.style.display = 'none';
+  });
+</script>
+
+<style>
+  @keyframes pulse-line {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+</style>
+
+</Base>

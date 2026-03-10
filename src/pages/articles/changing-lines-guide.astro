@@ -1,0 +1,130 @@
+---
+import Base from '../../layouts/Base.astro';
+const site = 'https://yijin.builtbyclaw.com';
+const title = '變爻的奧秘：動爻如何改變卦義';
+const description = '深入探討易經變爻（動爻）的機制與意義——老陽老陰如何產生、變卦如何形成，以及不同數量變爻的解讀規則。';
+const schema = JSON.stringify({ "@context": "https://schema.org", "@type": "BlogPosting", "headline": title, "description": description, "datePublished": "2026-02-25", "dateModified": "2026-02-25", "author": { "@type": "Organization", "name": "易經研究所" }, "publisher": { "@type": "Organization", "name": "易經研究所" } });
+---
+
+<Base title={`${title} | 易經研究所`} description={description} canonical={`${site}/articles/changing-lines-guide`} keywords="變爻,動爻,老陽老陰,變卦,之卦,易經占卦解讀" schema={schema} ogType="article" ogImage="https://yijin.builtbyclaw.com/articles/hero/article-changing-lines.webp" articleSection="爻辭探討" activePage="articles">
+
+<section class="article-hero article-hero--with-bg">
+  <div class="hero-bg-image">
+    <img src="/articles/hero/article-changing-lines.webp" alt="" loading="eager" fetchpriority="high" width="800" height="420" />
+  </div>
+  <div class="article-hero-inner">
+    <div class="container">
+      <span class="section-overline">爻辭探討</span>
+      <h1>{title}</h1>
+      <div class="article-meta">
+        <span>2026-02-25</span>
+        <span>閱讀時間：13 分鐘</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="article-body">
+  <p class="article-lead">
+    在易經占卦中，「變爻」是最關鍵的概念之一。一個卦象如果沒有變爻，它是靜止的；有了變爻，它就有了方向和動態。變爻不僅告訴你當前的處境，更指出了事態將如何演變。理解變爻的機制與解讀方法，是從初學者進階為熟練解卦者的必經之路。
+  </p>
+
+  <h2>什麼是變爻？</h2>
+  <p>
+    在三幣法（或蓍草法）占卦中，每一爻的數值為 6、7、8 或 9：
+  </p>
+  <ul>
+    <li><strong>7（少陽）</strong>——陽爻，穩定，不變。</li>
+    <li><strong>8（少陰）</strong>——陰爻，穩定，不變。</li>
+    <li><strong>9（老陽）</strong>——陽爻，但即將變為陰。這就是「變爻」。</li>
+    <li><strong>6（老陰）</strong>——陰爻，但即將變為陽。這也是「變爻」。</li>
+  </ul>
+  <p>
+    為什麼叫「老」？因為在中國哲學中，「老」代表事物發展到了極點。老陽是陽氣到了極盛，即將轉為陰；老陰是陰氣到了極盛，即將轉為陽。這正體現了「物極必反」的核心思想。
+  </p>
+  <p>
+    如果你還不熟悉三幣法的操作，建議先閱讀<a href="/articles/three-coins-method">三幣法占卦教學</a>。
+  </p>
+
+  <h2>變卦（之卦）的形成</h2>
+  <p>
+    當一卦中有變爻時，將所有變爻進行陰陽互換（老陽變陰，老陰變陽），其餘爻不變，就形成了新的卦象，稱為「變卦」或「之卦」。
+  </p>
+  <p>
+    例如：你占得乾卦（六爻皆陽），其中九二為變爻（老陽），那麼九二從陽變為陰。原卦仍然是乾（☰☰），變卦就是同人卦（因為只有第二爻從陽變陰，形成的新卦是天火同人）。
+  </p>
+  <p>
+    原卦代表「現在的狀態」，變卦代表「事態發展的方向」。兩者結合起來，構成了一個完整的動態圖景。這就是易經「變」的精髓——事物永遠處於變化之中，而占卦能捕捉到這個變化的趨勢。
+  </p>
+
+  <h2>變爻數量與解讀規則</h2>
+  <p>
+    占卦結果中變爻的數量不同，解讀的重點也不同。以下是南宋理學家朱熹在《周易本義》中提出的解讀規則，至今仍被廣泛使用：
+  </p>
+  <ol>
+    <li><strong>無變爻</strong>——六爻皆為少陽或少陰，沒有任何變化。此時只看本卦的卦辭作為占斷。這代表局勢穩定，暫時不會有大的變動。</li>
+    <li><strong>一個變爻</strong>——最常見也最明確的情況。以該變爻的爻辭為主要占斷依據。同時參考本卦的卦辭了解整體背景。</li>
+    <li><strong>兩個變爻</strong>——以兩個變爻的爻辭為占斷，但以位置較上的那一爻為主。</li>
+    <li><strong>三個變爻</strong>——同時參看本卦與變卦的卦辭，以本卦卦辭為主體，變卦卦辭為趨勢。</li>
+    <li><strong>四個變爻</strong>——以變卦中不變的兩爻的爻辭為占斷，以位置較下者為主。</li>
+    <li><strong>五個變爻</strong>——以變卦中唯一不變的那一爻的爻辭為占斷。</li>
+    <li><strong>六爻皆變</strong>——看變卦的卦辭。乾卦六爻皆變則參看「用九」，坤卦六爻皆變則參看「用六」。</li>
+  </ol>
+
+  <div class="inline-cta">
+    <p>現在就去試試看你會得到幾個變爻！</p>
+    <a href="/tools/divination" class="cta-btn cta-btn--primary" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;border-radius:8px;font-weight:600;text-decoration:none">免費線上占卦</a>
+  </div>
+
+  <h2>變爻的深層含義</h2>
+  <p>
+    變爻不僅是一個技術性的概念，它還蘊含著深刻的哲學意義。在易經的世界觀中，變化是宇宙的根本法則。「少」代表新生的、穩定的力量，「老」代表成熟的、即將轉化的力量。
+  </p>
+  <p>
+    當你在占卦中遇到變爻時，它指向的是你生命中正在發生轉變的領域。一個老陽變為陰，可能暗示某個強勢的局面即將軟化；一個老陰變為陽，可能預示著沉潛已久的力量即將爆發。
+  </p>
+  <p>
+    變爻的位置也很重要。如果變爻出現在初爻，變化發生在事物的開端；出現在上爻，變化發生在事物的終結階段。出現在五爻（君位），可能涉及核心領導權的變動；出現在二爻（臣位），可能涉及輔助角色的轉換。
+  </p>
+
+  <h2>實例：帶變爻的占卦解讀</h2>
+  <p>
+    假設你問「是否應該換工作？」，占得雷水解卦（第40卦），九二為變爻。
+  </p>
+  <p>
+    <strong>本卦</strong>：雷水解。解卦象徵解除困難、紓解壓力。卦辭：「利西南。無所往，其來復吉。有攸往，夙吉。」——意味著解決問題後適合安定，若要行動則宜早。
+  </p>
+  <p>
+    <strong>變爻</strong>：九二：「田獲三狐，得黃矢，貞吉。」——在田獵中獲得三隻狐狸（排除了三個障礙/小人），得到黃色的箭矢（象徵中正之道），堅守正道則吉。
+  </p>
+  <p>
+    <strong>變卦</strong>：九二由陽變陰，形成雷地豫卦（第16卦），象徵歡樂、順暢。
+  </p>
+  <p>
+    <strong>綜合判斷</strong>：現在的處境（解卦）是正在解除某種束縛，變爻告訴你要排除障礙、堅守正道，趨勢（豫卦）指向歡樂順暢。結合你的問題——換工作是合理的選擇，但要果斷行動、排除猶豫，並確保新方向是正當的。
+  </p>
+
+  <h2>常見問題</h2>
+  <p>
+    <strong>問：變爻太多或太少代表什麼？</strong><br/>
+    答：沒有好壞之分。無變爻代表局勢穩定，不需要急於改變。六爻皆變代表局勢正在經歷根本性的轉變。多數情況下會出現一到三個變爻，這是最常見的狀態。
+  </p>
+  <p>
+    <strong>問：本卦和變卦哪個更重要？</strong><br/>
+    答：本卦描述你現在的處境，變卦描述事態的發展方向。兩者需要結合來看。一般而言，如果問的是「目前的情況」，以本卦為主；如果問的是「未來的趨勢」，以變卦為主。
+  </p>
+  <p>
+    掌握了變爻的概念後，你就具備了解讀占卦結果的核心能力。結合<a href="/articles/how-to-read-lines">爻辭解讀指南</a>中學到的爻位知識，你已經可以開始自主地解讀每一次占卦結果了。如果想更深入了解易經的哲學基礎，推薦閱讀<a href="/articles/yijing-philosophy">易經的哲學思想：變化之道</a>。
+  </p>
+
+  <div class="article-footnotes">
+    <h4>參考資料</h4>
+    <ol>
+      <li>朱熹，《周易本義》，中華書局。</li>
+      <li>劉大鈞，《周易概論》，齊魯書社。</li>
+      <li>南懷瑾，《易經雜說》，老古文化事業公司。</li>
+    </ol>
+  </div>
+</div>
+
+</Base>

@@ -1,0 +1,301 @@
+---
+import Base from '../../layouts/Base.astro';
+import { hexagrams } from '../../lib/hexagrams';
+import { trigrams } from '../../lib/trigrams';
+const site = 'https://yijin.builtbyclaw.com';
+---
+
+<Base title="六十四卦查詢 | 易經研究所" description="完整收錄易經六十四卦——卦辭、爻辭、象傳一覽無遺。支援搜尋、八卦組合篩選，是你的易經百科全書。" canonical={`${site}/tools/hexagram-lookup`} keywords="六十四卦,卦象查詢,易經百科,卦辭,爻辭,象傳" activePage="hexagrams">
+
+<section class="page-hero" style="position:relative;overflow:hidden">
+  <div class="hero-bg-image" style="opacity:.15">
+    <img src="/images/hero/bagua-cosmos.webp" alt="" loading="eager" fetchpriority="high" width="1200" height="630" />
+  </div>
+  <div class="container" style="position:relative;z-index:1">
+    <p class="section-overline">卦象百科</p>
+    <h1>六十四卦查詢</h1>
+    <p>完整收錄易經六十四卦的卦辭、爻辭與象傳。點擊任一卦象查看詳細內容。</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:1rem">
+  <div class="container">
+
+    <!-- Search & Filter -->
+    <div style="max-width:600px;margin:0 auto 2rem;display:flex;flex-direction:column;gap:1rem">
+      <input type="text" id="hexSearch" class="form-input" placeholder="搜尋卦名或關鍵字..." style="text-align:center" />
+      <div style="display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center">
+        <label style="font-size:.85rem;color:var(--mid-gray,var(--c-text-muted));display:flex;align-items:center;gap:.35rem">
+          上卦：
+          <select id="upperFilter" class="form-input" style="width:auto;padding:.4rem .75rem;font-size:.85rem">
+            <option value="">全部</option>
+            {trigrams.map(t => <option value={t.name}>{t.name} {t.symbol} {t.fullName}</option>)}
+          </select>
+        </label>
+        <label style="font-size:.85rem;color:var(--mid-gray,var(--c-text-muted));display:flex;align-items:center;gap:.35rem">
+          下卦：
+          <select id="lowerFilter" class="form-input" style="width:auto;padding:.4rem .75rem;font-size:.85rem">
+            <option value="">全部</option>
+            {trigrams.map(t => <option value={t.name}>{t.name} {t.symbol} {t.fullName}</option>)}
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <!-- Hexagram Grid -->
+    <div class="hex-grid" id="hexGrid">
+      {hexagrams.map(h => (
+        <div class="hex-card" data-number={h.number} data-name={h.name} data-char={h.character} data-upper={h.upperTrigram} data-lower={h.lowerTrigram} data-judgment={h.judgment} id={`hex-${h.number}`}>
+          <div class="hex-card-number">{h.number}</div>
+          <div class="hex-card-lines">
+            {[...h.lines].reverse().map(l => (
+              <div class:list={['hex-mini-line', l === 1 ? 'hex-mini-line--yang' : 'hex-mini-line--yin']} />
+            ))}
+          </div>
+          <div class="hex-card-name">{h.name}</div>
+          <div class="hex-card-char">{h.character}</div>
+        </div>
+      ))}
+    </div>
+
+    <!-- Detail modal -->
+    <div id="hexModal" class="hex-modal" style="display:none">
+      <div class="hex-modal-backdrop" id="hexModalBackdrop"></div>
+      <div class="hex-modal-content">
+        <button id="hexModalClose" class="hex-modal-close" aria-label="關閉">&times;</button>
+        <div id="hexModalBody"></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</Base>
+
+<style>
+  .hex-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: .75rem;
+  }
+  .hex-card {
+    background: var(--white, #fff);
+    border: 1px solid var(--light-gray, #e5e5e8);
+    border-radius: 10px;
+    padding: 1rem .75rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all .25s ease;
+    position: relative;
+  }
+  .hex-card:hover {
+    border-color: var(--jade, #2d8a56);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,.08);
+  }
+  .hex-card-number {
+    position: absolute;
+    top: .4rem;
+    left: .5rem;
+    font-size: .65rem;
+    color: var(--silver, #9ca3af);
+    font-weight: 600;
+  }
+  .hex-card-lines {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    margin-bottom: .5rem;
+  }
+  .hex-mini-line {
+    width: 36px;
+    height: 4px;
+    border-radius: 1px;
+  }
+  .hex-mini-line--yang {
+    background: var(--jade, #2d8a56);
+  }
+  .hex-mini-line--yin {
+    background: transparent;
+    display: flex;
+    justify-content: space-between;
+  }
+  .hex-mini-line--yin::before,
+  .hex-mini-line--yin::after {
+    content: '';
+    width: 14px;
+    height: 4px;
+    background: var(--jade, #2d8a56);
+    border-radius: 1px;
+  }
+  .hex-card-name {
+    font-family: var(--ff-serif, serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: .15rem;
+  }
+  .hex-card-char {
+    font-size: .7rem;
+    color: var(--mid-gray, #6b7280);
+  }
+  .hex-card.hidden {
+    display: none;
+  }
+
+  /* Modal */
+  .hex-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  .hex-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+  }
+  .hex-modal-content {
+    position: relative;
+    background: var(--white, #fff);
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 640px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,.2);
+  }
+  .hex-modal-close {
+    position: absolute;
+    top: .75rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    color: var(--mid-gray, #6b7280);
+    cursor: pointer;
+    background: none;
+    border: none;
+    line-height: 1;
+  }
+  .hex-modal-close:hover {
+    color: var(--near-black, #1a1a2e);
+  }
+
+  @media (max-width: 640px) {
+    .hex-grid {
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: .5rem;
+    }
+    .hex-card { padding: .75rem .5rem; }
+  }
+</style>
+
+<script>
+  import { hexagrams } from '../../lib/hexagrams';
+
+  const grid = document.getElementById('hexGrid')!;
+  const searchInput = document.getElementById('hexSearch') as HTMLInputElement;
+  const upperFilter = document.getElementById('upperFilter') as HTMLSelectElement;
+  const lowerFilter = document.getElementById('lowerFilter') as HTMLSelectElement;
+  const modal = document.getElementById('hexModal')!;
+  const modalBody = document.getElementById('hexModalBody')!;
+  const modalClose = document.getElementById('hexModalClose')!;
+  const modalBackdrop = document.getElementById('hexModalBackdrop')!;
+
+  function filterCards() {
+    const q = searchInput.value.trim().toLowerCase();
+    const upper = upperFilter.value;
+    const lower = lowerFilter.value;
+
+    grid.querySelectorAll('.hex-card').forEach(card => {
+      const el = card as HTMLElement;
+      const name = el.dataset.name || '';
+      const char = el.dataset.char || '';
+      const cardUpper = el.dataset.upper || '';
+      const cardLower = el.dataset.lower || '';
+      const judgment = el.dataset.judgment || '';
+
+      let show = true;
+      if (q && !name.includes(q) && !char.toLowerCase().includes(q) && !judgment.toLowerCase().includes(q)) {
+        show = false;
+      }
+      if (upper && cardUpper !== upper) show = false;
+      if (lower && cardLower !== lower) show = false;
+
+      el.classList.toggle('hidden', !show);
+    });
+  }
+
+  searchInput.addEventListener('input', filterCards);
+  upperFilter.addEventListener('change', filterCards);
+  lowerFilter.addEventListener('change', filterCards);
+
+  // Card click → modal
+  grid.addEventListener('click', (e) => {
+    const card = (e.target as HTMLElement).closest('.hex-card') as HTMLElement;
+    if (!card) return;
+    const num = parseInt(card.dataset.number || '0');
+    const hex = hexagrams.find(h => h.number === num);
+    if (!hex) return;
+
+    const linesHtml = [...hex.lines].reverse().map(l => {
+      if (l === 1) return `<div style="width:80px;height:8px;background:var(--jade,#2d8a56);border-radius:2px;margin:3px auto"></div>`;
+      return `<div style="width:80px;display:flex;justify-content:space-between;margin:3px auto"><div style="width:32px;height:8px;background:var(--jade,#2d8a56);border-radius:2px"></div><div style="width:32px;height:8px;background:var(--jade,#2d8a56);border-radius:2px"></div></div>`;
+    }).join('');
+
+    const lineTextsHtml = hex.lineTexts.map((t, i) =>
+      `<div style="padding:.75rem;margin-bottom:.5rem;background:var(--off-white,#f5f4f0);border-radius:8px;border-left:3px solid var(--jade,#2d8a56)">
+        <p style="font-weight:600;font-size:.8rem;margin-bottom:.25rem;color:var(--jade,#2d8a56)">第${i+1}爻</p>
+        <p style="font-family:var(--ff-serif);font-size:.9rem;margin:0">${t}</p>
+      </div>`
+    ).join('');
+
+    modalBody.innerHTML = `
+      <div style="text-align:center;margin-bottom:1.5rem">
+        <p style="font-size:.75rem;color:var(--mid-gray,#6b7280);margin-bottom:.5rem">第 ${hex.number} 卦</p>
+        <div style="margin-bottom:1rem">${linesHtml}</div>
+        <h2 style="font-size:1.75rem;margin-bottom:.25rem;font-family:var(--ff-serif)">${hex.name} <span style="font-size:.9rem;font-weight:400;color:var(--mid-gray,#6b7280)">${hex.pinyin}</span></h2>
+        <p style="color:var(--mid-gray,#6b7280)">${hex.character}｜上卦 ${hex.upperTrigram}・下卦 ${hex.lowerTrigram}</p>
+      </div>
+      <div style="margin-bottom:1.5rem">
+        <h3 style="font-size:1rem;margin-bottom:.5rem;color:var(--jade,#2d8a56)">卦辭</h3>
+        <blockquote style="border-left:3px solid var(--jade,#2d8a56);padding:.75rem 1rem;background:var(--jade-subtle,rgba(45,138,86,.08));border-radius:0 8px 8px 0;font-family:var(--ff-serif);margin:0">${hex.judgment}</blockquote>
+      </div>
+      <div style="margin-bottom:1.5rem">
+        <h3 style="font-size:1rem;margin-bottom:.5rem;color:var(--bronze,#b8860b)">象傳</h3>
+        <blockquote style="border-left:3px solid var(--bronze,#b8860b);padding:.75rem 1rem;background:var(--bronze-subtle,rgba(184,134,11,.1));border-radius:0 8px 8px 0;font-family:var(--ff-serif);margin:0">${hex.image}</blockquote>
+      </div>
+      <div>
+        <h3 style="font-size:1rem;margin-bottom:.75rem;color:var(--jade,#2d8a56)">爻辭</h3>
+        ${lineTextsHtml}
+      </div>
+    `;
+
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  });
+
+  function closeModal() {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  modalClose.addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', closeModal);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // Handle hash-based navigation
+  if (window.location.hash) {
+    const target = document.querySelector(window.location.hash);
+    if (target) {
+      (target as HTMLElement).click();
+    }
+  }
+</script>
+
+</Base>

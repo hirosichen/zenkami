@@ -1,0 +1,85 @@
+---
+/**
+ * HexagramDisplay – renders a hexagram visually with CSS lines.
+ *
+ * Props:
+ *   lines          – array of 6 numbers (bottom to top): 6, 7, 8, or 9
+ *                    7 = young yang (solid), 9 = old yang (solid, changing)
+ *                    8 = young yin  (broken), 6 = old yin  (broken, changing)
+ *   name           – hexagram name (e.g. "乾 Qián")
+ *   changingLines  – optional array of line positions (1-6) that are changing
+ *                    (auto-detected from 6/9 values if not provided)
+ *   upperTrigram   – optional label for upper trigram
+ *   lowerTrigram   – optional label for lower trigram
+ */
+export interface Props {
+  lines: number[];
+  name?: string;
+  changingLines?: number[];
+  upperTrigram?: string;
+  lowerTrigram?: string;
+}
+
+const {
+  lines,
+  name = '',
+  changingLines,
+  upperTrigram,
+  lowerTrigram,
+} = Astro.props;
+
+// Determine changing lines from the values if not explicitly provided
+const changing = changingLines ?? lines
+  .map((v, i) => (v === 6 || v === 9) ? i + 1 : -1)
+  .filter((i) => i > 0);
+
+// Determine yang/yin: 7 & 9 are yang (solid), 6 & 8 are yin (broken)
+function isYang(val: number): boolean {
+  return val === 7 || val === 9;
+}
+
+// Lines are given bottom-to-top, but we render top-to-bottom
+const displayLines = [...lines].reverse();
+// displayChanging available if needed for future index-based logic
+// const displayChanging = changing.map((pos) => lines.length - pos);
+---
+
+<div class="hexagram-display">
+  <div class="hexagram-lines" role="img" aria-label={name ? `卦象：${name}` : '卦象'}>
+    {displayLines.map((val, idx) => {
+      const originalPos = lines.length - idx; // 1-based bottom-to-top
+      const isChanging = changing.includes(originalPos);
+      const yang = isYang(val);
+      return (
+        <div
+          class:list={[
+            'hexagram-line',
+            yang ? 'hexagram-line--yang' : 'hexagram-line--yin',
+            isChanging && 'hexagram-line--changing',
+          ]}
+          aria-label={`第${originalPos}爻：${yang ? '陽' : '陰'}${isChanging ? '（變）' : ''}`}
+        />
+      );
+    })}
+  </div>
+
+  {name && <div class="hexagram-name">{name}</div>}
+
+  {(upperTrigram || lowerTrigram) && (
+    <div class="trigram-display">
+      {upperTrigram && (
+        <div class="trigram-label">
+          <span>上卦</span>
+          <strong>{upperTrigram}</strong>
+        </div>
+      )}
+      {upperTrigram && lowerTrigram && <div class="trigram-separator" />}
+      {lowerTrigram && (
+        <div class="trigram-label">
+          <span>下卦</span>
+          <strong>{lowerTrigram}</strong>
+        </div>
+      )}
+    </div>
+  )}
+</div>

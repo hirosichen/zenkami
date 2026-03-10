@@ -1,0 +1,94 @@
+---
+export interface Props {
+  activePage?: string;
+}
+
+const { activePage = '' } = Astro.props;
+---
+
+<!-- Accent gradient line -->
+<div class="nav-accent" aria-hidden="true"></div>
+
+<!-- Top info bar -->
+<div class="nav-topbar">
+  <span>易經研究所｜免費占卦・AI 即時解卦</span>
+</div>
+
+<!-- Main navigation -->
+<nav class="nav" id="main-nav" aria-label="主要導覽">
+  <div class="nav-inner">
+    <!-- Brand -->
+    <a href="/" class="nav-brand" aria-label="易經研究所 首頁">
+      <svg class="nav-brand-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="18" cy="18" r="17" stroke="currentColor" stroke-width="1.5" />
+        <circle cx="18" cy="18" r="12" stroke="currentColor" stroke-width="1" opacity="0.4" />
+        <!-- Trigram lines (☰ Qian) top -->
+        <line x1="11" y1="9" x2="25" y2="9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+        <line x1="11" y1="13" x2="25" y2="13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+        <line x1="11" y1="17" x2="25" y2="17" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+        <!-- Trigram lines (☷ Kun) bottom - broken -->
+        <line x1="11" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+        <line x1="20" y1="21" x2="25" y2="21" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+        <line x1="11" y1="25" x2="16" y2="25" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+        <line x1="20" y1="25" x2="25" y2="25" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+        <line x1="11" y1="29" x2="16" y2="29" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+        <line x1="20" y1="29" x2="25" y2="29" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+      </svg>
+      <span class="nav-brand-text">易經研究所</span>
+    </a>
+
+    <!-- Desktop links -->
+    <div class="nav-links">
+      <a href="/" class:list={['nav-link', { 'is-active': activePage === 'home' }]}>首頁</a>
+      <a href="/about" class:list={['nav-link', { 'is-active': activePage === 'about' }]}>關於</a>
+
+      <!-- 文章 dropdown -->
+      <div class="nav-has-dropdown">
+        <a href="/articles" class:list={['nav-link', { 'is-active': activePage === 'articles' }]}>
+          文章
+          <svg class="nav-dropdown-arrow" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+        <div class="nav-dropdown">
+          <a href="/articles?category=經典導讀" class="nav-dropdown-link">經典導讀</a>
+          <a href="/articles?category=卦象解析" class="nav-dropdown-link">卦象解析</a>
+          <a href="/articles?category=爻辭探討" class="nav-dropdown-link">爻辭探討</a>
+          <a href="/articles?category=哲學思想" class="nav-dropdown-link">哲學思想</a>
+          <a href="/articles?category=實用占卜" class="nav-dropdown-link">實用占卜</a>
+        </div>
+      </div>
+
+      <!-- 工具 dropdown -->
+      <div class="nav-has-dropdown">
+        <a href="/tools" class:list={['nav-link', { 'is-active': activePage === 'tools' }]}>
+          工具
+          <svg class="nav-dropdown-arrow" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </a>
+        <div class="nav-dropdown">
+          <a href="/tools/divination" class="nav-dropdown-link">線上占卦</a>
+          <a href="/tools/hexagram-lookup" class="nav-dropdown-link">卦象查詢</a>
+          <a href="/tools/ai-interpretation" class="nav-dropdown-link">AI 智能解卦</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <a href="/tools/divination" class="nav-cta">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" />
+        <path d="M5 8H11M8 5V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+      免費占卦
+    </a>
+
+    <!-- Hamburger -->
+    <button class="nav-toggle" id="nav-toggle" aria-label="開啟選單" aria-expanded="false">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+  </div>
+</nav>

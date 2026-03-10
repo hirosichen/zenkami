@@ -1,0 +1,379 @@
+---
+import Nav from '../components/Nav.astro';
+import MobileMenu from '../components/MobileMenu.astro';
+import Footer from '../components/Footer.astro';
+import SEOHead from '../components/SEOHead.astro';
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+  keywords?: string;
+  ogImage?: string;
+  ogType?: string;
+  publishedTime?: string;
+  modifiedTime?: string;
+  articleSection?: string;
+  articleTags?: string[];
+  robots?: string;
+  schema?: string;
+  activePage?: string;
+}
+
+const {
+  title,
+  description,
+  canonical,
+  keywords,
+  ogImage,
+  ogType,
+  publishedTime,
+  modifiedTime,
+  articleSection,
+  articleTags,
+  robots,
+  schema,
+  activePage = '',
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <SEOHead
+    title={title}
+    description={description}
+    canonical={canonical}
+    keywords={keywords}
+    ogImage={ogImage}
+    ogType={ogType}
+    publishedTime={publishedTime}
+    modifiedTime={modifiedTime}
+    articleSection={articleSection}
+    articleTags={articleTags}
+    robots={robots}
+    schema={schema}
+  />
+</head>
+
+<body>
+  <!-- Skip link -->
+  <a href="#main-content" class="skip-link">跳至主要內容</a>
+
+  <!-- Reading progress bar (article pages) -->
+  <div class="reading-progress" id="reading-progress" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <Nav activePage={activePage} />
+
+  <!-- Mobile Menu -->
+  <MobileMenu activePage={activePage} />
+
+  <!-- Main Content -->
+  <main id="main-content">
+    <slot />
+  </main>
+
+  <!-- Footer -->
+  <Footer />
+
+  <!-- Back to top -->
+  <button class="back-to-top" id="back-to-top" aria-label="回到頂部">
+    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M10 16V4M10 4L5 9M10 4L15 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  </button>
+
+  <!-- Mobile Sticky CTA -->
+  <div class="mobile-sticky-cta" id="mobile-sticky-cta">
+    <div class="mobile-sticky-cta-inner">
+      <a href="/tools/divination" class="mobile-sticky-btn mobile-sticky-btn--primary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.5" />
+          <path d="M5 8H11M8 5V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        免費占卦
+      </a>
+      <a href="/tools/ai-interpretation" class="mobile-sticky-btn mobile-sticky-btn--secondary">
+        AI 解卦
+      </a>
+    </div>
+  </div>
+
+  <script>
+    /* ============================================================
+       Scroll handler – nav shadow + back to top
+       ============================================================ */
+    (function () {
+      const nav = document.getElementById('main-nav');
+      const backToTop = document.getElementById('back-to-top');
+      let ticking = false;
+
+      function onScroll() {
+        const scrollY = window.scrollY;
+
+        // Nav shadow
+        if (nav) {
+          nav.classList.toggle('is-scrolled', scrollY > 20);
+        }
+
+        // Back to top visibility
+        if (backToTop) {
+          backToTop.classList.toggle('is-visible', scrollY > 500);
+        }
+
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(onScroll);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      // Back to top click
+      if (backToTop) {
+        backToTop.addEventListener('click', function () {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+    })();
+
+
+    /* ============================================================
+       Mobile menu toggle
+       ============================================================ */
+    (function () {
+      const toggle = document.getElementById('nav-toggle');
+      const menu = document.getElementById('mobile-menu');
+      const close = document.getElementById('mobile-close');
+
+      function openMenu() {
+        menu?.classList.add('is-open');
+        toggle?.classList.add('is-active');
+        toggle?.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMenu() {
+        menu?.classList.remove('is-open');
+        toggle?.classList.remove('is-active');
+        toggle?.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+
+      toggle?.addEventListener('click', function () {
+        const isOpen = menu?.classList.contains('is-open');
+        isOpen ? closeMenu() : openMenu();
+      });
+
+      close?.addEventListener('click', closeMenu);
+
+      // Close on Escape
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && menu?.classList.contains('is-open')) {
+          closeMenu();
+        }
+      });
+
+      // Close when clicking a link
+      menu?.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', closeMenu);
+      });
+    })();
+
+
+    /* ============================================================
+       Mobile menu expandable groups
+       ============================================================ */
+    (function () {
+      document.querySelectorAll('.mobile-services-toggle').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          const targetId = (btn as HTMLElement).dataset.target;
+          if (!targetId) return;
+          const list = document.getElementById(targetId);
+          if (!list) return;
+
+          const isExpanded = list.classList.contains('is-expanded');
+          list.classList.toggle('is-expanded');
+          btn.classList.toggle('is-expanded');
+          btn.setAttribute('aria-expanded', String(!isExpanded));
+        });
+      });
+    })();
+
+
+    /* ============================================================
+       Article filter (category pills)
+       ============================================================ */
+    (function () {
+      const filterBar = document.querySelector('.filter-bar');
+      if (!filterBar) return;
+
+      filterBar.addEventListener('click', function (e) {
+        const target = (e.target as HTMLElement).closest('.filter-btn');
+        if (!target) return;
+
+        // Update active state
+        filterBar.querySelectorAll('.filter-btn').forEach(function (btn) {
+          btn.classList.remove('is-active', 'active');
+        });
+        target.classList.add('is-active');
+
+        const category = (target as HTMLElement).dataset.category || 'all';
+
+        // Toggle article visibility
+        document.querySelectorAll('[data-category]').forEach(function (card) {
+          if (card.classList.contains('filter-btn')) return; // skip filter buttons themselves
+          if (category === 'all') {
+            card.classList.remove('filter-hidden');
+          } else {
+            card.classList.toggle(
+              'filter-hidden',
+              (card as HTMLElement).dataset.category !== category
+            );
+          }
+        });
+      });
+    })();
+
+
+    /* ============================================================
+       IntersectionObserver – fade-up animations
+       ============================================================ */
+    (function () {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.querySelectorAll('.fade-up').forEach(function (el) {
+          el.classList.add('is-visible');
+        });
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { rootMargin: '0px 0px -60px 0px', threshold: 0.1 }
+      );
+
+      document.querySelectorAll('.fade-up').forEach(function (el) {
+        observer.observe(el);
+      });
+    })();
+
+
+    /* ============================================================
+       Image skeleton loader
+       ============================================================ */
+    (function () {
+      document.querySelectorAll('img[data-skeleton]').forEach(function (img) {
+        const el = img as HTMLImageElement;
+        if (el.complete) {
+          el.closest('.img-skeleton')?.classList.add('img-loaded');
+        } else {
+          el.addEventListener('load', function () {
+            el.closest('.img-skeleton')?.classList.add('img-loaded');
+          });
+        }
+      });
+    })();
+
+
+    /* ============================================================
+       Reading progress bar
+       ============================================================ */
+    (function () {
+      const bar = document.getElementById('reading-progress');
+      const article = document.querySelector('.article-body');
+      if (!bar || !article) return;
+
+      let ticking = false;
+
+      function updateProgress() {
+        const rect = article!.getBoundingClientRect();
+        const articleTop = rect.top + window.scrollY;
+        const articleHeight = rect.height;
+        const scrolled = window.scrollY - articleTop;
+        const progress = Math.min(Math.max(scrolled / articleHeight, 0), 1);
+        bar!.style.width = (progress * 100) + '%';
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          requestAnimationFrame(updateProgress);
+          ticking = true;
+        }
+      }, { passive: true });
+    })();
+
+
+    /* ============================================================
+       Mobile TOC drawer
+       ============================================================ */
+    (function () {
+      const tocToggle = document.getElementById('toc-drawer-toggle');
+      const tocDrawer = document.getElementById('toc-drawer');
+      const tocOverlay = document.getElementById('toc-drawer-overlay');
+      const tocClose = document.getElementById('toc-drawer-close');
+
+      if (!tocToggle || !tocDrawer) return;
+
+      function openToc() {
+        tocDrawer?.classList.add('is-open');
+        tocOverlay?.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeToc() {
+        tocDrawer?.classList.remove('is-open');
+        tocOverlay?.classList.remove('is-open');
+        document.body.style.overflow = '';
+      }
+
+      tocToggle.addEventListener('click', openToc);
+      tocClose?.addEventListener('click', closeToc);
+      tocOverlay?.addEventListener('click', closeToc);
+
+      // Close on link click
+      tocDrawer.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', closeToc);
+      });
+    })();
+
+
+    /* ============================================================
+       Newsletter subscribe handler
+       ============================================================ */
+    (function () {
+      document.querySelectorAll('[id$="newsletter-form"]').forEach(function (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+          const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement;
+          if (!emailInput || !emailInput.value) return;
+
+          const btn = form.querySelector('button[type="submit"]');
+          if (btn) {
+            const originalText = btn.textContent;
+            btn.textContent = '已送出！';
+            btn.setAttribute('disabled', 'true');
+            emailInput.value = '';
+
+            setTimeout(function () {
+              btn.textContent = originalText;
+              btn.removeAttribute('disabled');
+            }, 3000);
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

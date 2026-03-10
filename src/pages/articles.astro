@@ -1,0 +1,93 @@
+---
+import Base from '../layouts/Base.astro';
+const site = 'https://yijin.builtbyclaw.com';
+
+const articles = [
+  { slug: 'history-of-yijing', title: '易經源流考：從伏羲八卦到文王六十四卦', category: '經典導讀', date: '2026-01-15', readTime: '12 分鐘', desc: '追溯易經三千年的發展歷程，了解這部經典如何從占卜之書演變為哲學巨著。' },
+  { slug: 'ten-wings-guide', title: '十翼導讀：孔子與易經的哲學昇華', category: '經典導讀', date: '2026-01-22', readTime: '15 分鐘', desc: '深入解析易傳十翼的內容與思想，理解孔子如何將易經從占卜提升為哲學。' },
+  { slug: 'qian-kun-hexagrams', title: '乾坤二卦詳解：天地之道的奧秘', category: '卦象解析', date: '2026-02-01', readTime: '14 分鐘', desc: '全面解析易經首二卦的卦辭、爻辭與象傳，揭示天地之道的核心意涵。' },
+  { slug: 'eight-trigrams-guide', title: '八卦入門：認識八個基本符號的意義', category: '卦象解析', date: '2026-02-10', readTime: '10 分鐘', desc: '從乾坤到震巽，全面認識構成六十四卦的八個基本卦象及其象徵意義。' },
+  { slug: 'how-to-read-lines', title: '爻辭解讀指南：初學者必讀', category: '爻辭探討', date: '2026-02-18', readTime: '11 分鐘', desc: '系統性教學如何閱讀與理解爻辭，掌握易經解讀的基本功。' },
+  { slug: 'changing-lines-guide', title: '變爻的奧秘：動爻如何改變卦義', category: '爻辭探討', date: '2026-02-25', readTime: '13 分鐘', desc: '深入探討變爻的機制與意義，理解動爻如何影響占卦結果的解讀。' },
+  { slug: 'yijing-philosophy', title: '易經的哲學思想：變化之道', category: '哲學思想', date: '2026-03-01', readTime: '14 分鐘', desc: '探索易經「變易」「不易」「簡易」三義，理解易經作為哲學體系的核心思想。' },
+  { slug: 'yinyang-wuxing', title: '陰陽五行與易經的關係', category: '哲學思想', date: '2026-03-05', readTime: '12 分鐘', desc: '解析陰陽五行理論如何與易經體系交織，構成中國傳統宇宙觀的基礎。' },
+  { slug: 'three-coins-method', title: '三幣法占卦教學：最簡單的占卦方式', category: '實用占卜', date: '2026-03-08', readTime: '8 分鐘', desc: '手把手教你使用三枚銅錢進行占卦，是最簡單也最常用的占卦方法。' },
+  { slug: 'divination-ethics', title: '占卜心法：問卦的正確態度與禁忌', category: '實用占卜', date: '2026-03-10', readTime: '10 分鐘', desc: '學習問卦前的心理準備、提問技巧與傳統禁忌，讓占卦更加精準有效。' },
+];
+
+const categories = ['全部', '經典導讀', '卦象解析', '爻辭探討', '哲學思想', '實用占卜'];
+
+const slugToImage: Record<string, string> = {
+  'history-of-yijing': 'article-history',
+  'ten-wings-guide': 'article-ten-wings',
+  'qian-kun-hexagrams': 'article-qian-kun',
+  'eight-trigrams-guide': 'article-eight-trigrams',
+  'how-to-read-lines': 'article-read-lines',
+  'changing-lines-guide': 'article-changing-lines',
+  'yijing-philosophy': 'article-philosophy',
+  'yinyang-wuxing': 'article-yinyang',
+  'three-coins-method': 'article-three-coins',
+  'divination-ethics': 'article-ethics',
+};
+---
+
+<Base title="文章 | 易經研究所" description="易經研究所精選文章——從經典導讀、卦象解析到實用占卜教學，系統性學習易經知識。" canonical={`${site}/articles`} keywords="易經文章,周易學習,八卦教學,占卦教學,易經入門" activePage="articles">
+
+<section class="page-hero">
+  <div class="hero-bg-image" style="opacity:0.15;">
+    <img src="/images/hero/bagua-cosmos.webp" alt="" loading="eager" width="1200" height="630" />
+  </div>
+  <div class="container" style="position:relative;z-index:1">
+    <p class="section-overline">學習資源</p>
+    <h1>易經文章</h1>
+    <p>從入門到進階，系統性學習易經的核心概念、卦象解析與占卦技巧。</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:2rem">
+  <div class="container">
+    <div class="filter-bar" id="filterBar">
+      {categories.map((cat, i) => (
+        <button class:list={['filter-btn', { active: i === 0 }]} data-category={cat}>{cat}</button>
+      ))}
+    </div>
+
+    <div class="grid-3" id="articlesGrid">
+      {articles.map(a => (
+        <a href={`/articles/${a.slug}`} class="card article-card" data-category={a.category} style="text-decoration:none">
+          <div class="article-card-image img-skeleton">
+            <img src={`/articles/hero/${slugToImage[a.slug]}.webp`} alt={a.title} loading="lazy" width="800" height="420" data-skeleton />
+          </div>
+          <p style="font-size:.75rem;color:var(--c-primary);margin-bottom:.5rem">{a.category}</p>
+          <h3 style="font-size:1.05rem;margin-bottom:.5rem">{a.title}</h3>
+          <p style="font-size:.85rem;color:var(--c-text-muted);margin-bottom:.75rem">{a.desc}</p>
+          <p style="font-size:.75rem;color:var(--c-text-muted)">{a.date} · {a.readTime}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+</Base>
+
+<script>
+  const filterBar = document.getElementById('filterBar');
+  const grid = document.getElementById('articlesGrid');
+  if (filterBar && grid) {
+    filterBar.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('.filter-btn');
+      if (!btn) return;
+      filterBar.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.getAttribute('data-category');
+      grid.querySelectorAll('.article-card').forEach(card => {
+        const el = card as HTMLElement;
+        if (cat === '全部' || el.getAttribute('data-category') === cat) {
+          el.style.display = '';
+        } else {
+          el.style.display = 'none';
+        }
+      });
+    });
+  }
+</script>

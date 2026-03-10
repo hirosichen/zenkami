@@ -1,0 +1,359 @@
+---
+import Base from '../layouts/Base.astro';
+
+const site = 'https://yijin.builtbyclaw.com';
+const schema = JSON.stringify({
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "易經研究所",
+      "url": site,
+      "description": "免費線上易經占卦平台，AI 智能解卦，六十四卦完整解析",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": `${site}/tools/hexagram-lookup?q={search_term_string}`,
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "Organization",
+      "name": "易經研究所",
+      "url": site,
+      "description": "致力於將三千年易經智慧帶入現代生活"
+    }
+  ]
+});
+---
+
+<Base title="易經研究所 | 免費線上占卦・AI 智能解卦・六十四卦解析" description="易經研究所提供免費線上占卦、AI 智能解卦、六十四卦完整解析。三千年東方智慧，一鍵即得。已有超過 2,000 人使用。" canonical={site} keywords="易經,周易,占卦,免費占卦,六十四卦,八卦,AI解卦,線上占卦,I Ching" schema={schema} ogImage="https://yijin.builtbyclaw.com/images/og-default.webp" activePage="home">
+
+<!-- Hero -->
+<section class="hero" id="hero">
+  <div class="hero-bg-image">
+    <img src="/images/hero/bagua-cosmos.webp" alt="" loading="eager" fetchpriority="high" width="1200" height="630" />
+  </div>
+  <div class="hero-bg-video">
+    <video autoplay muted loop playsinline preload="none" poster="/images/hero/bagua-cosmos.webp">
+      <source src="/images/hero/divination-master.mp4" type="video/mp4" />
+    </video>
+  </div>
+  <canvas id="baguaCanvas" class="hero-canvas"></canvas>
+  <div class="container hero-inner">
+    <p class="section-overline animate-in">免費・即時占卦・AI 智慧解讀</p>
+    <h1 class="hero-title animate-in animate-delay-1">易經六十四卦<br>揭示你的命運密碼</h1>
+    <p class="hero-desc animate-in animate-delay-2">傳承三千年的東方智慧，結合現代科技，為你提供即時、精準的易經占卦與解讀服務。</p>
+    <form class="hero-form animate-in animate-delay-3" id="heroForm">
+      <input type="text" class="form-input" placeholder="輸入你想問的問題（選填）" id="heroQuestion" />
+      <button type="submit" class="btn btn-primary btn-lg">免費占卦</button>
+    </form>
+    <p class="hero-proof animate-in animate-delay-4">已有超過 <strong>2,000</strong> 人使用</p>
+  </div>
+</section>
+
+<!-- Value Props -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-overline">為什麼選擇我們</p>
+      <h2 class="section-title">古老智慧，現代體驗</h2>
+      <p class="section-desc">我們將傳統易經占卦方法數位化，讓你隨時隨地都能獲得指引。</p>
+    </div>
+    <div class="grid-4">
+      <div class="card">
+        <div class="value-img img-skeleton">
+          <img src="/images/sections/value-instant.webp" alt="即時占卦" loading="lazy" width="400" height="400" data-skeleton />
+        </div>
+        <h3>即時占卦</h3>
+        <p>模擬傳統三幣法，一鍵完成六次擲幣，即時獲得卦象結果。</p>
+      </div>
+      <div class="card">
+        <div class="value-img img-skeleton">
+          <img src="/images/sections/value-ai.webp" alt="AI 解卦" loading="lazy" width="400" height="400" data-skeleton />
+        </div>
+        <h3>AI 解卦</h3>
+        <p>結合人工智慧技術，根據你的問題提供個人化的卦象解讀。</p>
+      </div>
+      <div class="card">
+        <div class="value-img img-skeleton">
+          <img src="/images/sections/value-free.webp" alt="完全免費" loading="lazy" width="400" height="400" data-skeleton />
+        </div>
+        <h3>完全免費</h3>
+        <p>所有占卦工具與學習資源完全免費開放，無需註冊即可使用。</p>
+      </div>
+      <div class="card">
+        <div class="value-img img-skeleton">
+          <img src="/images/sections/value-wisdom.webp" alt="古典智慧" loading="lazy" width="400" height="400" data-skeleton />
+        </div>
+        <h3>古典智慧</h3>
+        <p>忠於原典，提供完整的卦辭、爻辭與象傳，深入理解每一卦。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="section" style="background:var(--c-bg-alt);border-top:1px solid var(--c-border);border-bottom:1px solid var(--c-border)">
+  <div class="container">
+    <div class="stats-row" id="statsRow">
+      <div class="stat-item"><div class="stat-number" data-target="2000">0</div><div class="stat-label">占卦次數</div></div>
+      <div class="stat-item"><div class="stat-number" data-target="64">0</div><div class="stat-label">卦象收錄</div></div>
+      <div class="stat-item"><div class="stat-number" data-target="100">0</div><div class="stat-label">% 免費</div></div>
+      <div class="stat-item"><div class="stat-number" data-target="4.9" data-decimal="true">0</div><div class="stat-label">使用者好評</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Tools Preview -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-overline">占卦工具</p>
+      <h2 class="section-title">探索你的命運</h2>
+      <p class="section-desc">三大核心工具，滿足你從占卦到學習的所有需求。</p>
+    </div>
+    <div class="grid-3">
+      <a href="/tools/divination" class="tool-card">
+        <div class="tool-card-img img-skeleton">
+          <img src="/images/sections/tool-divination.webp" alt="線上占卦工具" loading="lazy" width="600" height="400" data-skeleton />
+        </div>
+        <h3>線上占卦</h3>
+        <p>模擬傳統三幣法，即時獲得卦象與變爻，搭配詳細解讀。</p>
+        <span class="btn btn-outline" style="margin-top:.5rem">開始占卦</span>
+      </a>
+      <a href="/tools/divination" class="tool-card">
+        <div class="tool-card-img img-skeleton">
+          <img src="/images/sections/tool-ai.webp" alt="AI 智能解卦工具" loading="lazy" width="600" height="400" data-skeleton />
+        </div>
+        <h3>AI 智能解卦</h3>
+        <p>根據你的問題與卦象，提供個人化的 AI 深度解讀與建議。</p>
+        <span class="btn btn-outline" style="margin-top:.5rem">體驗解卦</span>
+      </a>
+      <a href="/tools/hexagram-lookup" class="tool-card">
+        <div class="tool-card-img img-skeleton">
+          <img src="/images/sections/tool-lookup.webp" alt="卦象查詢工具" loading="lazy" width="600" height="400" data-skeleton />
+        </div>
+        <h3>卦象查詢</h3>
+        <p>完整收錄六十四卦，含卦辭、爻辭、象傳，是你的易經百科全書。</p>
+        <span class="btn btn-outline" style="margin-top:.5rem">查詢卦象</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="section" style="background:var(--c-bg-alt);border-top:1px solid var(--c-border);border-bottom:1px solid var(--c-border)">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-overline">使用者評價</p>
+      <h2 class="section-title">他們這樣說</h2>
+    </div>
+    <div class="grid-4">
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">「占卦結果非常準確，對我的職涯決定提供了很好的方向指引。介面簡潔，操作容易。」</p>
+        <img class="testimonial-avatar" src="/images/testimonials/testimonial-woman-taipei.webp" alt="林小姐" loading="lazy" width="48" height="48" />
+        <p class="testimonial-author">林小姐</p>
+        <p class="testimonial-role">行銷經理</p>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">「作為易經研究者，這個平台的卦辭資料非常完整準確。變爻解讀功能特別實用。」</p>
+        <img class="testimonial-avatar" src="/images/testimonials/testimonial-man-professor.webp" alt="陳先生" loading="lazy" width="48" height="48" />
+        <p class="testimonial-author">陳先生</p>
+        <p class="testimonial-role">大學教授</p>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">「之前對易經完全不了解，這個平台讓我輕鬆入門。文章內容深入淺出，非常推薦。」</p>
+        <img class="testimonial-avatar" src="/images/testimonials/testimonial-student.webp" alt="王同學" loading="lazy" width="48" height="48" />
+        <p class="testimonial-author">王同學</p>
+        <p class="testimonial-role">研究生</p>
+      </div>
+      <div class="testimonial">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-text">「免費又專業的占卦工具，每次遇到人生選擇都會來占一卦，已經成為日常習慣了。」</p>
+        <img class="testimonial-avatar" src="/images/testimonials/testimonial-woman-freelance.webp" alt="張小姐" loading="lazy" width="48" height="48" />
+        <p class="testimonial-author">張小姐</p>
+        <p class="testimonial-role">自由工作者</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mid-page CTA -->
+<section class="section" style="text-align:center;position:relative;overflow:hidden">
+  <div class="quote-bg-image">
+    <img src="/images/sections/cta-background.webp" alt="" loading="lazy" width="1200" height="675" />
+  </div>
+  <div class="container" style="position:relative;z-index:1">
+    <h2 class="section-title">還在猶豫？試一次就知道</h2>
+    <p class="section-desc" style="margin-left:auto;margin-right:auto">不需要任何易經知識，只要帶著你的問題，讓古老的智慧為你指引方向。完全免費，無需註冊。</p>
+    <a href="/tools/divination" class="btn btn-primary btn-lg">立即免費占卦</a>
+  </div>
+</section>
+
+<!-- Featured Articles -->
+<section class="section" style="background:var(--c-bg-alt);border-top:1px solid var(--c-border)">
+  <div class="container">
+    <div class="section-header">
+      <p class="section-overline">精選文章</p>
+      <h2 class="section-title">深入了解易經</h2>
+      <p class="section-desc">從入門到進階，系統性學習易經的核心概念與占卦技巧。</p>
+    </div>
+    <div class="grid-3">
+      <a href="/articles/history-of-yijing" class="card" style="text-decoration:none">
+        <div class="article-card-image img-skeleton">
+          <img src="/articles/hero/article-history.webp" alt="易經源流考" loading="lazy" width="800" height="420" data-skeleton />
+        </div>
+        <p style="font-size:.75rem;color:var(--c-primary);margin-bottom:.5rem">經典導讀</p>
+        <h3>易經源流考：從伏羲八卦到文王六十四卦</h3>
+        <p>追溯易經三千年的發展歷程，了解這部經典如何從占卜之書演變為哲學巨著。</p>
+      </a>
+      <a href="/articles/eight-trigrams-guide" class="card" style="text-decoration:none">
+        <div class="article-card-image img-skeleton">
+          <img src="/articles/hero/article-eight-trigrams.webp" alt="八卦入門" loading="lazy" width="800" height="420" data-skeleton />
+        </div>
+        <p style="font-size:.75rem;color:var(--c-primary);margin-bottom:.5rem">卦象解析</p>
+        <h3>八卦入門：認識八個基本符號的意義</h3>
+        <p>從乾坤到震巽，全面認識構成六十四卦的八個基本卦象及其象徵意義。</p>
+      </a>
+      <a href="/articles/three-coins-method" class="card" style="text-decoration:none">
+        <div class="article-card-image img-skeleton">
+          <img src="/articles/hero/article-three-coins.webp" alt="三幣法占卦教學" loading="lazy" width="800" height="420" data-skeleton />
+        </div>
+        <p style="font-size:.75rem;color:var(--c-primary);margin-bottom:.5rem">實用占卜</p>
+        <h3>三幣法占卦教學：最簡單的占卦方式</h3>
+        <p>手把手教你使用三枚銅錢進行占卦，是最簡單也最常用的占卦方法。</p>
+      </a>
+    </div>
+    <div style="text-align:center;margin-top:2rem">
+      <a href="/articles" class="btn btn-outline">閱讀更多文章</a>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter CTA -->
+<section class="section">
+  <div class="container">
+    <div class="newsletter">
+      <h2 class="section-title" style="font-size:1.5rem">訂閱易經研究所電子報</h2>
+      <p style="color:var(--c-text-muted)">每週精選一篇易經學習文章，直送你的信箱。</p>
+      <form class="newsletter-form" onsubmit="event.preventDefault();alert('感謝訂閱！')">
+        <input type="email" placeholder="your@email.com" required />
+        <button type="submit" class="btn btn-primary">訂閱</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+</Base>
+
+<style>
+  .hero{position:relative;min-height:90vh;display:flex;align-items:center;justify-content:center;overflow:hidden;padding:6rem 0 4rem}
+  .hero-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
+  .hero-inner{position:relative;z-index:1;text-align:center;max-width:720px}
+  .hero-title{font-size:clamp(2.25rem,6vw,3.75rem);margin-bottom:1.25rem;line-height:1.2}
+  .hero-desc{color:var(--c-text-muted);font-size:1.1rem;max-width:560px;margin:0 auto 2rem}
+  .hero-form{display:flex;gap:.75rem;max-width:520px;margin:0 auto 1.5rem}
+  .hero-form .form-input{flex:1}
+  .hero-proof{color:var(--c-text-muted);font-size:.85rem}
+  .hero-proof strong{color:var(--c-primary)}
+  @media(max-width:640px){.hero-form{flex-direction:column}}
+</style>
+
+<script>
+  // Hero form redirect
+  document.getElementById('heroForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const q = (document.getElementById('heroQuestion') as HTMLInputElement)?.value;
+    const url = q ? `/tools/divination?q=${encodeURIComponent(q)}` : '/tools/divination';
+    window.location.href = url;
+  });
+
+  // Bagua particle canvas
+  (function() {
+    const canvas = document.getElementById('baguaCanvas') as HTMLCanvasElement;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    let w = 0, h = 0;
+    const symbols = ['☰','☱','☲','☳','☴','☵','☶','☷','☯','⚊','⚋'];
+    interface Particle { x:number; y:number; vx:number; vy:number; s:string; size:number; alpha:number; }
+    let particles: Particle[] = [];
+
+    function resize() {
+      w = canvas.width = canvas.offsetWidth;
+      h = canvas.height = canvas.offsetHeight;
+    }
+
+    function init() {
+      resize();
+      particles = [];
+      const count = Math.min(60, Math.floor(w * h / 15000));
+      for (let i = 0; i < count; i++) {
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          s: symbols[Math.floor(Math.random() * symbols.length)],
+          size: 12 + Math.random() * 16,
+          alpha: 0.05 + Math.random() * 0.12,
+        });
+      }
+    }
+
+    function draw() {
+      ctx!.clearRect(0, 0, w, h);
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < -20) p.x = w + 20;
+        if (p.x > w + 20) p.x = -20;
+        if (p.y < -20) p.y = h + 20;
+        if (p.y > h + 20) p.y = -20;
+        ctx!.globalAlpha = p.alpha;
+        ctx!.font = `${p.size}px serif`;
+        ctx!.fillStyle = '#c9a84c';
+        ctx!.fillText(p.s, p.x, p.y);
+      }
+      ctx!.globalAlpha = 1;
+      requestAnimationFrame(draw);
+    }
+
+    init();
+    draw();
+    window.addEventListener('resize', resize);
+  })();
+
+  // Stat counter animation
+  (function() {
+    const row = document.getElementById('statsRow');
+    if (!row) return;
+    const nums = row.querySelectorAll('.stat-number');
+    let animated = false;
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !animated) {
+        animated = true;
+        nums.forEach(el => {
+          const target = parseFloat(el.getAttribute('data-target') || '0');
+          const isDecimal = el.getAttribute('data-decimal') === 'true';
+          const duration = 1500;
+          const start = performance.now();
+          function tick(now: number) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const current = eased * target;
+            el.textContent = isDecimal ? current.toFixed(1) : Math.floor(current).toLocaleString() + (target >= 2000 ? '+' : '');
+            if (progress < 1) requestAnimationFrame(tick);
+          }
+          requestAnimationFrame(tick);
+        });
+      }
+    }, { threshold: 0.3 });
+    observer.observe(row);
+  })();
+</script>

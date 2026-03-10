@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+const site = 'https://yijin.builtbyclaw.com';
+---
+
+<Base title="占卦工具 | 易經研究所" description="易經研究所提供免費線上占卦工具——三幣法占卦、AI 智能解卦、六十四卦百科查詢。" canonical={`${site}/tools`} keywords="易經工具,線上占卦,免費占卦,AI解卦,六十四卦查詢" activePage="tools">
+
+<section class="page-hero">
+  <div class="hero-bg-image" style="opacity:0.15;">
+    <img src="/images/hero/bagua-cosmos.webp" alt="" loading="eager" width="1200" height="630" />
+  </div>
+  <div class="container" style="position:relative;z-index:1">
+    <p class="section-overline">免費工具</p>
+    <h1>易經占卦工具</h1>
+    <p>完全免費、無需註冊。選擇你需要的工具，開始探索易經的智慧。</p>
+  </div>
+</section>
+
+<section class="section" style="padding-top:2rem">
+  <div class="container">
+    <div class="grid-3">
+      <a href="/tools/divination" class="tool-card">
+        <div class="tool-card-img img-skeleton">
+          <img src="/images/sections/tool-divination.webp" alt="線上占卦工具" loading="lazy" width="600" height="400" data-skeleton />
+        </div>
+        <h3>線上占卦</h3>
+        <p>使用傳統三幣法進行占卦。系統模擬擲幣過程，自動計算卦象與變爻，並提供完整的卦辭與爻辭解讀。適合有具體問題想要尋求指引的使用者。</p>
+        <span class="btn btn-primary" style="margin-top:1rem">開始占卦</span>
+      </a>
+      <a href="/tools/divination" class="tool-card">
+        <div class="tool-card-img img-skeleton">
+          <img src="/images/sections/tool-ai.webp" alt="AI 智能解卦工具" loading="lazy" width="600" height="400" data-skeleton />
+        </div>
+        <h3>AI 智能解卦</h3>
+        <p>在完成占卦後，可將你的問題與卦象交給 AI 進行深度分析。結合傳統易學知識與現代語言，提供個人化的解讀與建議。</p>
+        <span class="btn btn-outline" style="margin-top:1rem">了解更多</span>
+      </a>
+      <a href="/tools/hexagram-lookup" class="tool-card">
+        <div class="tool-card-img img-skeleton">
+          <img src="/images/sections/tool-lookup.webp" alt="卦象查詢工具" loading="lazy" width="600" height="400" data-skeleton />
+        </div>
+        <h3>六十四卦查詢</h3>
+        <p>完整收錄易經六十四卦的卦辭、爻辭與象傳。支援按名稱搜尋、按八卦組合篩選，是你學習易經的百科全書。</p>
+        <span class="btn btn-outline" style="margin-top:1rem">開始查詢</span>
+      </a>
+    </div>
+
+    <div style="margin-top:4rem">
+      <div class="section-header">
+        <p class="section-overline">學習資源</p>
+        <h2 class="section-title">不知道從哪開始？</h2>
+        <p class="section-desc">如果你是易經新手，建議先閱讀以下文章：</p>
+      </div>
+      <div class="grid-3">
+        <a href="/articles/eight-trigrams-guide" class="card" style="text-decoration:none">
+          <h3 style="font-size:1rem">八卦入門</h3>
+          <p>認識構成易經的八個基本符號。</p>
+        </a>
+        <a href="/articles/three-coins-method" class="card" style="text-decoration:none">
+          <h3 style="font-size:1rem">三幣法教學</h3>
+          <p>學習最簡單的占卦方法。</p>
+        </a>
+        <a href="/articles/how-to-read-lines" class="card" style="text-decoration:none">
+          <h3 style="font-size:1rem">爻辭解讀指南</h3>
+          <p>掌握閱讀卦象結果的基本功。</p>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</Base>
