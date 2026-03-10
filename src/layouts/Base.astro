@@ -354,21 +354,45 @@ const {
        ============================================================ */
     (function () {
       document.querySelectorAll('[id$="newsletter-form"]').forEach(function (form) {
-        form.addEventListener('submit', function (e) {
+        form.addEventListener('submit', async function (e) {
           e.preventDefault();
           const emailInput = form.querySelector('input[type="email"]') as HTMLInputElement;
           if (!emailInput || !emailInput.value) return;
 
-          const btn = form.querySelector('button[type="submit"]');
-          if (btn) {
-            const originalText = btn.textContent;
-            btn.textContent = '已送出！';
-            btn.setAttribute('disabled', 'true');
-            emailInput.value = '';
+          const btn = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+          if (!btn) return;
 
+          const originalText = btn.textContent;
+          btn.textContent = '送出中...';
+          btn.disabled = true;
+
+          try {
+            const res = await fetch('/api/subscribe', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ email: emailInput.value }),
+            });
+            const data = await res.json();
+
+            if (data.success) {
+              btn.textContent = '訂閱成功！';
+              emailInput.value = '';
+              setTimeout(function () {
+                btn.textContent = originalText;
+                btn.disabled = false;
+              }, 3000);
+            } else {
+              btn.textContent = data.error || '訂閱失敗';
+              setTimeout(function () {
+                btn.textContent = originalText;
+                btn.disabled = false;
+              }, 3000);
+            }
+          } catch {
+            btn.textContent = '網路錯誤，請稍後再試';
             setTimeout(function () {
               btn.textContent = originalText;
-              btn.removeAttribute('disabled');
+              btn.disabled = false;
             }, 3000);
           }
         });
