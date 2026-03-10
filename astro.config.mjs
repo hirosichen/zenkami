@@ -17,7 +17,7 @@ function serifFontOptimizer() {
 }
 
 export default defineConfig({
-  site: 'https://yijin.builtbyclaw.com',
+  site: 'https://zenkami.com',
   adapter: cloudflare(),
 
   build: {
