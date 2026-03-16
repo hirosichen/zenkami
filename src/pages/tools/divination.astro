@@ -396,7 +396,7 @@ const site = 'https://zenkami.com';
     const pageHero = document.querySelector('.page-hero') as HTMLElement;
     if (pageHero) pageHero.style.display = 'none';
     const section = stepResult.closest('.section') as HTMLElement;
-    if (section) section.style.paddingTop = '2rem';
+    if (section) section.style.paddingTop = '7rem';
     // Hide methodology section during result view
     const methSection = document.getElementById('methodologySection');
     if (methSection) methSection.style.display = 'none';
@@ -503,7 +503,7 @@ const site = 'https://zenkami.com';
     // Auto-scroll to email gate after user has time to see the result
     setTimeout(() => {
       document.getElementById('aiGate')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 1500);
+    }, 2500);
   }
 
   // AI Interpretation with Email Gate
