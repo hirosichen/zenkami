@@ -161,7 +161,7 @@ const site = 'https://zenkami.com';
 
         <!-- Actions -->
         <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-top:2rem">
-          <button id="retryBtn" class="cta-btn cta-btn--secondary" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;border-radius:8px;font-weight:600;cursor:pointer">重新占卦</button>
+          <button id="retryBtn" class="cta-btn cta-btn--secondary" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;border-radius:8px;font-weight:600;cursor:pointer;border:1.5px solid var(--jade,#2d8a56);color:var(--jade,#2d8a56)">重新占卦</button>
           <a id="lookupLink" href="/tools/hexagram-lookup" class="cta-btn cta-btn--primary" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;border-radius:8px;font-weight:600;text-decoration:none">查看完整卦象</a>
         </div>
       </div>
@@ -171,7 +171,7 @@ const site = 'https://zenkami.com';
 </section>
 
 <!-- Methodology section -->
-<section class="section" style="padding-top:3rem;border-top:1px solid var(--border-color,#e5e5e8)">
+<section id="methodologySection" class="section" style="padding-top:3rem;border-top:1px solid var(--border-color,#e5e5e8)">
   <div class="container" style="max-width:720px">
     <h2 style="font-size:1.3rem;margin-bottom:1rem;text-align:center">關於三幣法</h2>
     <p style="color:var(--mid-gray,var(--c-text-muted));text-align:center;max-width:600px;margin:0 auto 1.5rem;font-size:.9rem">
@@ -392,14 +392,19 @@ const site = 'https://zenkami.com';
   function showResult(lines: LineResult[]) {
     stepThrowing.style.display = 'none';
     stepResult.style.display = '';
-    // Hide page hero to remove blank space above result
+    // Hide page hero and add top padding for fixed nav clearance
     const pageHero = document.querySelector('.page-hero') as HTMLElement;
     if (pageHero) pageHero.style.display = 'none';
-    // Show user question if provided
-    const userQ = (document.getElementById('questionInput') as HTMLTextAreaElement)?.value?.trim();
+    const section = stepResult.closest('.section') as HTMLElement;
+    if (section) section.style.paddingTop = '2rem';
+    // Hide methodology section during result view
+    const methSection = document.getElementById('methodologySection');
+    if (methSection) methSection.style.display = 'none';
+    // Show user question if provided (check textarea or URL param)
+    const userQ = (document.getElementById('questionInput') as HTMLTextAreaElement)?.value?.trim() || params.get('q') || '';
     const qDisplay = document.getElementById('userQuestionDisplay')!;
     if (userQ) {
-      qDisplay.textContent = `你的提問：「${userQ}」`;
+      qDisplay.innerHTML = `<span style="opacity:.6">你的提問：</span>「${userQ}」`;
       qDisplay.style.display = '';
     } else {
       qDisplay.style.display = 'none';
@@ -671,9 +676,14 @@ const site = 'https://zenkami.com';
     stepQuestion.style.display = '';
     stepThrowing.style.display = 'none';
     stepResult.style.display = 'none';
-    // Restore page hero
+    // Restore page hero and section padding
     const pageHero = document.querySelector('.page-hero') as HTMLElement;
     if (pageHero) pageHero.style.display = '';
+    const section = stepQuestion.closest('.section') as HTMLElement;
+    if (section) section.style.paddingTop = '1rem';
+    // Restore methodology section
+    const methSection = document.getElementById('methodologySection');
+    if (methSection) methSection.style.display = '';
     currentHex = null;
     currentTransformedHex = null;
     currentChangingIndices = [];
@@ -797,7 +807,7 @@ const site = 'https://zenkami.com';
 
   /* Consultation Upsell */
   .consult-upsell {
-    margin-top: 1.5rem;
+    margin-top: 2rem;
     padding: 2rem 1.5rem;
     background: linear-gradient(135deg, #fffbf0, #f0fdf4);
     border: 2px solid var(--bronze, #b8860b);
