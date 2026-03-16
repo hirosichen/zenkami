@@ -113,7 +113,7 @@ const schema = JSON.stringify({
       <p class="section-desc">三大核心工具，滿足你從占卦到學習的所有需求。</p>
     </div>
     <div class="grid-3">
-      <a href="/tools/divination" class="tool-card">
+      <a href="/tools/divination?auto=1" class="tool-card">
         <div class="tool-card-img img-skeleton">
           <img src="/images/sections/tool-divination.webp" alt="線上占卦工具" loading="lazy" width="600" height="400" data-skeleton />
         </div>
@@ -121,7 +121,7 @@ const schema = JSON.stringify({
         <p>模擬傳統三幣法，即時獲得卦象與變爻，搭配詳細解讀。</p>
         <span class="btn btn-outline" style="margin-top:.5rem">開始占卦</span>
       </a>
-      <a href="/tools/divination" class="tool-card">
+      <a href="/tools/divination?auto=1" class="tool-card">
         <div class="tool-card-img img-skeleton">
           <img src="/images/sections/tool-ai.webp" alt="AI 智能解卦工具" loading="lazy" width="600" height="400" data-skeleton />
         </div>
@@ -189,7 +189,7 @@ const schema = JSON.stringify({
   <div class="container" style="position:relative;z-index:1">
     <h2 class="section-title">還在猶豫？試一次就知道</h2>
     <p class="section-desc" style="margin-left:auto;margin-right:auto">不需要任何易經知識，只要帶著你的問題，讓古老的智慧為你指引方向。完全免費，無需註冊。</p>
-    <a href="/tools/divination" class="btn btn-primary btn-lg">立即免費占卦</a>
+    <a href="/tools/divination?auto=1" class="btn btn-primary btn-lg">立即免費占卦</a>
   </div>
 </section>
 
@@ -239,7 +239,7 @@ const schema = JSON.stringify({
     <div class="newsletter">
       <h2 class="section-title" style="font-size:1.5rem">訂閱易經研究所電子報</h2>
       <p style="color:var(--c-text-muted)">每週精選一篇易經學習文章，直送你的信箱。</p>
-      <form class="newsletter-form" onsubmit="event.preventDefault();alert('感謝訂閱！')">
+      <form class="newsletter-form" id="home-newsletter-form">
         <input type="email" placeholder="your@email.com" required />
         <button type="submit" class="btn btn-primary">訂閱</button>
       </form>
@@ -267,7 +267,7 @@ const schema = JSON.stringify({
   document.getElementById('heroForm')?.addEventListener('submit', (e) => {
     e.preventDefault();
     const q = (document.getElementById('heroQuestion') as HTMLInputElement)?.value;
-    const url = q ? `/tools/divination?q=${encodeURIComponent(q)}` : '/tools/divination';
+    const url = q ? `/tools/divination?q=${encodeURIComponent(q)}&auto=1` : '/tools/divination?auto=1';
     window.location.href = url;
   });
 

@@ -24,8 +24,9 @@ const site = 'https://zenkami.com';
       <div class="card" style="text-align:center;padding:2.5rem">
         <h2 style="font-size:1.3rem;margin-bottom:1rem">在心中默想你的問題</h2>
         <p style="color:var(--mid-gray,var(--c-text-muted));margin-bottom:1.5rem;font-size:.9rem">可以在下方輸入問題（選填），或直接開始占卦。建議問題明確、具體。</p>
-        <div style="margin-bottom:1.5rem">
-          <textarea id="questionInput" class="form-input" placeholder="例如：我應該接受這份新工作嗎？" rows="3" style="resize:vertical"></textarea>
+        <div style="margin-bottom:1.5rem;position:relative">
+          <textarea id="questionInput" class="form-input" placeholder="" rows="3" style="resize:vertical"></textarea>
+          <div id="typewriterOverlay" style="position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;display:flex;align-items:flex-start;padding:.65rem 1rem;font-size:.9rem;color:var(--mid-gray,#9ca3af);white-space:pre-wrap;line-height:1.6"></div>
         </div>
         <button id="startBtn" class="cta-btn cta-btn--primary" style="display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 2rem;border-radius:8px;font-weight:600;font-size:1rem;cursor:pointer">開始占卦</button>
       </div>
@@ -42,8 +43,11 @@ const site = 'https://zenkami.com';
     <!-- Step 3: Result -->
     <div id="step-result" class="divination-step" style="display:none">
       <div class="card" style="padding:2rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+          <p class="section-overline" style="font-size:.75rem;margin:0">占卦結果</p>
+          <button id="retryBtnTop" style="background:none;border:1px solid var(--border-color,#e5e5e8);padding:.35rem .75rem;border-radius:6px;font-size:.8rem;color:var(--mid-gray,#6b7280);cursor:pointer;transition:all .2s">重新占卦</button>
+        </div>
         <div style="text-align:center;margin-bottom:2rem">
-          <p class="section-overline" style="font-size:.75rem">占卦結果</p>
           <div id="hexagramViz" style="display:flex;flex-direction:column;align-items:center;gap:6px;margin:1.5rem 0"></div>
           <h2 id="hexagramName" style="font-size:1.75rem;margin-bottom:.25rem"></h2>
           <p id="hexagramPinyin" style="color:var(--mid-gray,var(--c-text-muted));font-size:.9rem"></p>
@@ -135,9 +139,21 @@ const site = 'https://zenkami.com';
                 <span>專屬文字報告 + 後續追蹤</span>
               </div>
             </div>
-            <a href="mailto:contact@zenkami.com?subject=預約易經諮詢&body=您好，我想預約一對一易經諮詢。%0A%0A我的問題是：%0A我的卦象是：" id="consultBtn" class="consult-upsell-btn">
-              預約諮詢（名額有限）
-            </a>
+            <!-- Booking Form -->
+            <form id="consultForm" class="consult-form">
+              <input type="text" id="consultName" class="form-input" placeholder="你的姓名" required style="text-align:center" />
+              <input type="email" id="consultEmail" class="form-input" placeholder="Email（系統會自動帶入）" required style="text-align:center" />
+              <select id="consultTime" class="form-input" required style="text-align:center">
+                <option value="" disabled selected>選擇偏好時段</option>
+                <option value="weekday-morning">平日上午 (9:00-12:00)</option>
+                <option value="weekday-afternoon">平日下午 (14:00-18:00)</option>
+                <option value="weekday-evening">平日晚上 (19:00-21:00)</option>
+                <option value="weekend-morning">週末上午 (10:00-12:00)</option>
+                <option value="weekend-afternoon">週末下午 (14:00-17:00)</option>
+              </select>
+              <textarea id="consultNote" class="form-input" placeholder="補充說明（選填）" rows="2" style="resize:vertical;text-align:left"></textarea>
+              <button type="submit" id="consultSubmitBtn" class="consult-upsell-btn">預約諮詢（名額有限）</button>
+            </form>
             <p class="consult-upsell-note">回覆時間約 24 小時內 ・ 首次諮詢享優惠價</p>
           </div>
         </div>
@@ -221,6 +237,78 @@ const site = 'https://zenkami.com';
     if (input) input.value = preQ;
   }
 
+  /* Typewriter placeholder effect */
+  (function() {
+    const textarea = document.getElementById('questionInput') as HTMLTextAreaElement;
+    const overlay = document.getElementById('typewriterOverlay');
+    if (!textarea || !overlay) return;
+
+    const examples = [
+      '我應該接受這份新工作嗎？',
+      '今年的感情運勢如何？',
+      '這個投資項目值得進行嗎？',
+      '我和他/她的關係會怎麼發展？',
+      '接下來半年事業會有什麼變化？',
+      '我該不該搬到新城市生活？',
+    ];
+    let exIdx = 0;
+    let charIdx = 0;
+    let isDeleting = false;
+    let timer: ReturnType<typeof setTimeout>;
+    let stopped = false;
+
+    function tick() {
+      if (stopped) return;
+      // Hide overlay when user has typed something
+      if (textarea.value) {
+        overlay.textContent = '';
+        timer = setTimeout(tick, 500);
+        return;
+      }
+
+      const current = examples[exIdx];
+      if (!isDeleting) {
+        charIdx++;
+        overlay.textContent = current.slice(0, charIdx) + '|';
+        if (charIdx >= current.length) {
+          // Pause at full text
+          timer = setTimeout(() => { isDeleting = true; tick(); }, 2000);
+          return;
+        }
+        timer = setTimeout(tick, 80 + Math.random() * 60);
+      } else {
+        charIdx--;
+        overlay.textContent = charIdx > 0 ? current.slice(0, charIdx) + '|' : '|';
+        if (charIdx <= 0) {
+          isDeleting = false;
+          exIdx = (exIdx + 1) % examples.length;
+          timer = setTimeout(tick, 400);
+          return;
+        }
+        timer = setTimeout(tick, 35);
+      }
+    }
+
+    // Start after short delay
+    setTimeout(tick, 600);
+
+    // Stop typewriter when user focuses textarea
+    textarea.addEventListener('focus', () => {
+      if (!textarea.value) overlay.textContent = '';
+    });
+    textarea.addEventListener('blur', () => {
+      if (!textarea.value && !stopped) tick();
+    });
+    textarea.addEventListener('input', () => {
+      if (textarea.value) {
+        overlay.textContent = '';
+      }
+    });
+
+    // Expose stop function for auto-start
+    (window as any).__stopTypewriter = () => { stopped = true; clearTimeout(timer); overlay.textContent = ''; };
+  })();
+
   const stepQuestion = document.getElementById('step-question')!;
   const stepThrowing = document.getElementById('step-throwing')!;
   const stepResult = document.getElementById('step-result')!;
@@ -250,6 +338,8 @@ const site = 'https://zenkami.com';
     stepThrowing.style.display = '';
     stepResult.style.display = 'none';
     throwsContainer.innerHTML = '';
+    // Scroll to the throwing step so no blank space
+    stepThrowing.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     // Reset AI section
     document.getElementById('aiGate')!.style.display = '';
@@ -300,6 +390,11 @@ const site = 'https://zenkami.com';
   function showResult(lines: LineResult[]) {
     stepThrowing.style.display = 'none';
     stepResult.style.display = '';
+    // Hide page hero to remove blank space above result
+    const pageHero = document.querySelector('.page-hero') as HTMLElement;
+    if (pageHero) pageHero.style.display = 'none';
+    // Scroll to result
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     currentChangingIndices = lines.map((l, i) => l.isChanging ? i : -1).filter(i => i >= 0);
     const primaryYY = lines.map(l => lineToYinYang(l.value));
@@ -389,10 +484,10 @@ const site = 'https://zenkami.com';
       document.getElementById('transformedSection')!.style.display = 'none';
     }
 
-    // Auto-scroll to email gate after a brief delay
+    // Auto-scroll to email gate after user has time to see the result
     setTimeout(() => {
       document.getElementById('aiGate')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 600);
+    }, 1500);
   }
 
   // AI Interpretation with Email Gate
@@ -446,12 +541,16 @@ const site = 'https://zenkami.com';
       // Scroll to AI result
       aiResult.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-      // Show consultation upsell after AI result
-      consultUpsell.style.display = '';
-      // Pre-fill consultation email with hexagram info
-      const consultBtn = document.getElementById('consultBtn') as HTMLAnchorElement;
-      const hexInfo = `第${currentHex.number}卦 ${currentHex.fullName}（${currentHex.name}）`;
-      consultBtn.href = `mailto:contact@zenkami.com?subject=預約易經諮詢&body=您好，我想預約一對一易經諮詢。%0A%0A我的問題是：${encodeURIComponent(question || '（未填寫）')}%0A我的卦象是：${encodeURIComponent(hexInfo)}%0A%0A請問最近有空的時段是？`;
+      // Show consultation upsell after AI result with slight delay
+      setTimeout(() => {
+        consultUpsell.style.display = '';
+        consultUpsell.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 800);
+      // Pre-fill consultation email from the gate email input
+      const gateEmail = (document.getElementById('aiEmailInput') as HTMLInputElement).value;
+      if (gateEmail) {
+        (document.getElementById('consultEmail') as HTMLInputElement).value = gateEmail;
+      }
     } catch (err: unknown) {
       aiLoading.style.display = 'none';
       aiGate.style.display = '';
@@ -483,29 +582,101 @@ const site = 'https://zenkami.com';
   });
 
   function renderMarkdown(text: string): string {
-    return text
-      .replace(/^## (.+)$/gm, '<h3 class="ai-heading">$1</h3>')
-      .replace(/^### (.+)$/gm, '<h4 class="ai-subheading">$1</h4>')
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\n\n/g, '</p><p>')
-      .replace(/\n- /g, '</p><li>')
-      .replace(/\n/g, '<br>')
-      .replace(/<\/p><li>/g, '</p><ul><li>')
-      .replace(/<li>([^<]*?)(?=<\/p>|<li>|$)/g, '<li>$1</li>')
-      .replace(/(<\/li>)(?![\s\S]*<li>)/g, '$1</ul>')
-      .replace(/^/, '<p>')
-      .replace(/$/, '</p>');
+    const lines = text.split('\n');
+    let html = '';
+    let inList = false;
+
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        if (inList) { html += '</ul>'; inList = false; }
+        continue;
+      }
+      if (trimmed.startsWith('## ')) {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += `<h3 class="ai-heading">${trimmed.slice(3)}</h3>`;
+      } else if (trimmed.startsWith('### ')) {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += `<h4 class="ai-subheading">${trimmed.slice(4)}</h4>`;
+      } else if (trimmed.startsWith('- ')) {
+        if (!inList) { html += '<ul>'; inList = true; }
+        html += `<li>${trimmed.slice(2).replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</li>`;
+      } else {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += `<p>${trimmed.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')}</p>`;
+      }
+    }
+    if (inList) html += '</ul>';
+    return html;
   }
 
+  // Consultation form handler
+  document.getElementById('consultForm')!.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('consultSubmitBtn') as HTMLButtonElement;
+    const originalText = btn.textContent;
+    btn.textContent = '送出中...';
+    btn.disabled = true;
+
+    const question = (document.getElementById('questionInput') as HTMLTextAreaElement).value.trim();
+    const hexInfo = currentHex ? `第${currentHex.number}卦 ${currentHex.fullName}（${currentHex.name}）` : '';
+
+    try {
+      const res = await fetch('/api/consult', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: (document.getElementById('consultName') as HTMLInputElement).value.trim(),
+          email: (document.getElementById('consultEmail') as HTMLInputElement).value.trim(),
+          time: (document.getElementById('consultTime') as HTMLSelectElement).value,
+          note: (document.getElementById('consultNote') as HTMLTextAreaElement).value.trim(),
+          question,
+          hexagram: hexInfo,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        const form = document.getElementById('consultForm')!;
+        form.innerHTML = `
+          <div style="text-align:center;padding:1.5rem 0">
+            <svg width="48" height="48" fill="none" stroke="var(--jade,#2d8a56)" stroke-width="2" viewBox="0 0 24 24" style="margin-bottom:.75rem"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <h4 style="color:var(--jade,#2d8a56);margin-bottom:.5rem;font-size:1.1rem">預約成功！</h4>
+            <p style="color:var(--mid-gray,#6b7280);font-size:.9rem">我們會在 24 小時內透過 Email 與你聯繫，<br/>安排諮詢時間。</p>
+          </div>
+        `;
+      } else {
+        btn.textContent = data.error || '送出失敗，請稍後再試';
+        setTimeout(() => { btn.textContent = originalText; btn.disabled = false; }, 3000);
+      }
+    } catch {
+      btn.textContent = '網路錯誤，請稍後再試';
+      setTimeout(() => { btn.textContent = originalText; btn.disabled = false; }, 3000);
+    }
+  });
+
   startBtn.addEventListener('click', runDivination);
-  retryBtn.addEventListener('click', () => {
+
+  function handleRetry() {
     stepQuestion.style.display = '';
     stepThrowing.style.display = 'none';
     stepResult.style.display = 'none';
+    // Restore page hero
+    const pageHero = document.querySelector('.page-hero') as HTMLElement;
+    if (pageHero) pageHero.style.display = '';
     currentHex = null;
     currentTransformedHex = null;
     currentChangingIndices = [];
-  });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  retryBtn.addEventListener('click', handleRetry);
+  document.getElementById('retryBtnTop')?.addEventListener('click', handleRetry);
+
+  // Auto-start divination when ?auto=1
+  if (params.get('auto') === '1') {
+    if ((window as any).__stopTypewriter) (window as any).__stopTypewriter();
+    setTimeout(runDivination, 300);
+  }
 </script>
 
 <style>
@@ -638,14 +809,11 @@ const site = 'https://zenkami.com';
     line-height: 1.7;
   }
   .consult-upsell-features {
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     gap: .6rem;
     margin-bottom: 1.5rem;
     text-align: left;
-    max-width: 380px;
-    margin-left: auto;
-    margin-right: auto;
   }
   .consult-feature {
     display: flex;
@@ -655,7 +823,9 @@ const site = 'https://zenkami.com';
     color: var(--near-black, #333);
   }
   .consult-upsell-btn {
-    display: inline-block;
+    display: block;
+    max-width: 320px;
+    margin: 0 auto;
     padding: .85rem 2.5rem;
     background: var(--bronze, #b8860b);
     color: #fff;
@@ -670,6 +840,36 @@ const site = 'https://zenkami.com';
     background: #a07608;
     transform: translateY(-1px);
     box-shadow: 0 6px 20px rgba(184,134,11,.4);
+  }
+  .consult-form {
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+    max-width: 340px;
+    margin: 0 auto 1rem;
+  }
+  .consult-form .form-input {
+    width: 100%;
+    padding: .7rem 1rem;
+    border: 1px solid var(--border, #e5e7eb);
+    border-radius: 8px;
+    font-size: .9rem;
+    background: var(--bg, #fff);
+    color: var(--near-black, #333);
+    transition: border-color .2s;
+    box-sizing: border-box;
+  }
+  .consult-form .form-input:focus {
+    outline: none;
+    border-color: var(--bronze, #b8860b);
+    box-shadow: 0 0 0 3px rgba(184,134,11,.1);
+  }
+  .consult-form select.form-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right .75rem center;
+    padding-right: 2rem;
   }
   .consult-upsell-note {
     font-size: .75rem;

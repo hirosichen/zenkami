@@ -1899,7 +1899,7 @@ html {
 .footer-inner {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: var(--space-4xl) var(--space-lg) var(--space-2xl);
+  padding: var(--space-4xl) var(--space-lg) calc(var(--space-2xl) + 72px);
 }
 
 .footer-top {
