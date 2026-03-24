@@ -73,6 +73,8 @@ const { activePage = '' } = Astro.props;
           <a href="/tools/ai-interpretation" class="nav-dropdown-link">AI 智能解卦</a>
         </div>
       </div>
+
+      <a href="/test" class:list={['nav-link', { 'is-active': activePage === 'test' }]}>測試</a>
     </div>
 
     <!-- CTA -->
