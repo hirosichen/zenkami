@@ -1,3 +1,6 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Built with Astro](https://astro.badg.es/v2/built-with-astro/small.svg)](https://astro.build)
+
 # Astro Starter Kit: Minimal
 
 ```sh
@@ -24,6 +27,22 @@ Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page
 There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
 
 Any static assets, like images, can be placed in the `public/` directory.
+
+## 🚀 Getting Started
+
+```sh
+# Clone the repository
+git clone <repo-url>
+cd yijin-institute
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm run dev
+```
+
+Open [http://localhost:4321](http://localhost:4321) in your browser to see the site.
 
 ## 🧞 Commands
 
