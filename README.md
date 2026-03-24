@@ -1,3 +1,4 @@
+<!-- E2E final test from Claude Dev Platform 2026-03-24 -->
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Built with Astro](https://astro.badg.es/v2/built-with-astro/small.svg)](https://astro.build)
 
